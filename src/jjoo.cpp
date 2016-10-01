@@ -98,3 +98,11 @@ std::ostream &operator>>(std::ostream &os, const JJOO &j) {
 bool JJOO::operator==(const JJOO &j) const {
     return true;
 }
+
+JJOO JJOO::operator=(const JJOO &j) {
+    _anio = j._anio;
+    _atletas = j._atletas;
+    _cronograma = j._cronograma;
+    _jornadaActual = j._jornadaActual;
+    return (*this);
+}
