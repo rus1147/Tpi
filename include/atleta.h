@@ -14,6 +14,7 @@ private:
     string _nombre;
     Genero _genero;
     vector<pair<Deporte, int> > _deportes;
+    bool _deportesAsignados;
 
 public:
     Atleta(const string &n, const Genero &g, const int &a, const Pais &p, const int &c);
