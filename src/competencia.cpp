@@ -1,22 +1,31 @@
 #include "../include/competencia.h"
+#include "../tests/auxiliares_tests.h"
 
 
 Competencia::Competencia(const Deporte &d, const Genero &g, const vector<Atleta> &as) {
-}
+    pair<Deporte,Genero> Categoria(d,g);
+    this->_categoria = Categoria;
+    not _finalizada;
+    _lesTocoControlAntiDoping;
+    mismos(_ranking,_participantes);
+    }
 
 Categoria Competencia::categoria() const {
+
     return pair<Deporte, Genero>();
 }
 
 vector<Atleta> Competencia::participantes() const {
+
     return vector<Atleta>();
 }
 
 bool Competencia::finalizada() const {
-    return false;
+    return this->_finalizada;
 }
 
 vector<Atleta> Competencia::ranking() const {
+
     return vector<Atleta>();
 }
 
@@ -27,7 +36,8 @@ vector<Atleta> Competencia::lesTocoControlAntiDoping() const {
 }
 
 bool Competencia::leDioPositivo(const Atleta &a) const {
-    return false;
+
+    return this->_lesTocoControlAntiDoping;
 }
 
 void Competencia::finalizar(const vector<int> &posiciones, const vector<pair<int, bool> > &control) {
