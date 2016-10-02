@@ -2,39 +2,58 @@
 
 
 Atleta::Atleta(const string &n, const Genero &g, const int &a, const Pais &p, const int &c) {
+    this->_nombre = n;
+    this->_genero = g;
+    this->_anioNacimiento = a;
+    this->_nacionalidad = p;
+    this->_ciaNumber = c;
+    pair deporteYCapacidadPorDefecto = pair<Deporte, int> ("Tenis", 50);
+    this->_deportes = vector<pair<Deporte, int>> (1, deporteYCapacidadPorDefecto);
+
 }
 
 string Atleta::nombre() const {
-    return "";
+    return this->_nombre;
 }
 
 Genero Atleta::genero() const {
-    return Genero::Femenino;
+    return this->_genero;
 }
 
 int Atleta::anioNacimiento() const {
-    return 1920;
+    return this->_anioNacimiento;
 }
 
 Pais Atleta::nacionalidad() const {
-    return "Andorra";
+    return this->_nacionalidad;
 }
 
 int Atleta::ciaNumber() const {
-    return 0;
+    return this->_ciaNumber;
 }
 
 vector<Deporte> Atleta::deportes() const {
     vector<Deporte> ret;
+    int i = 0;
+    while(i < this->_deportes.size()){
+        ret.push_back(this->_deportes[i].first);
+        i++;
+    }
     return ret;
 }
 
 int Atleta::capacidad(const Deporte &d) const {
+    int i = 0;
+    while(i < this->_deportes.size()){
+        if(this->_deportes[i].first == d){
+            return this->_deportes[i].second;
+        }
+        i++;
+    }
     return 0;
 }
 
 Deporte Atleta::especialidad() const {
-    return "Tenis";
 }
 
 void Atleta::entrenarNuevoDeporte(const Deporte &d, const int &c) {
