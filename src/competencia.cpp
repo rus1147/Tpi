@@ -123,7 +123,13 @@ void Competencia::sancionarTramposos() {
     int i=0;
     while(i<this->_lesTocoControlAntiDoping.size()){
         if(this->_lesTocoControlAntiDoping[i].second){
-            this->_ranking.erase(this->_ranking.begin()+i);
+            int j=0;
+            while(j<this->_ranking.size()){
+                if(this->_ranking[j].ciaNumber() == this->_lesTocoControlAntiDoping[i].first.ciaNumber()){
+                    this->_ranking.erase(this->_ranking.begin()+j);
+                }
+                j++;
+            }
         } else {
             i++;
         }
