@@ -4,8 +4,8 @@ cmake_minimum_required(VERSION 2.8)
 # Nombre del proyecto
 project(TPI)
 
-# Algunos flags para pasar al compilador
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -ggdb3 -Wall")
+# Algunos flags para pasar al compilador (gnu++11 en vez de c++11 para que sea cross-plat)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11 -ggdb3 -Wall")
 
 # Traemos los headers (*.h) del TPI
 include_directories(../include)

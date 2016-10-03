@@ -7,9 +7,10 @@
 #include "auxiliares_tests.h"
 
 
-TEST(jjoo_tests, observadores_muestran_lo_construido) {
+TEST(jjoo_tests, observadores_de_jjoo_sin_atletas_ni_competencias) {
     std::vector<Atleta> atletas;
     JJOO jo = JJOO(2016, {}, {{}});
+
 
     ASSERT_EQ(2016, jo.anio());
     ASSERT_EQ(atletas, jo.atletas());
@@ -22,18 +23,24 @@ TEST(jjoo_tests, observadores_muestran_lo_construido) {
 TEST(jjoo_tests, observador_competencias) {
     std::vector<Atleta> atletas;
     atletas.emplace_back(paises[0] + std::to_string(0), Genero::Femenino, 1620, paises[0], atletas.size());
+
     std::vector<std::vector<Competencia>> cronograma(3);
+
     std::vector<Competencia> competencias;
     for (int i = 0; i < 6; i++) {
         atletas[0].entrenarNuevoDeporte(deportes[1], 50);
     }
+
     for (int i = 0; i < 6; i++) {
         if (i % 2)
             cronograma[i / 2] = {Competencia(deportes[i - 1], Genero::Femenino, atletas),
                                  Competencia(deportes[i], Genero::Femenino, atletas)};
         competencias.emplace_back(deportes[i], Genero::Femenino, atletas);
     }
+
+
     JJOO jo = JJOO(2016, atletas, cronograma);
+
 
     ASSERT_EQ(2016, jo.anio());
     ASSERT_EQ(atletas, jo.atletas());
@@ -147,24 +154,27 @@ TEST(jjoo_tests, competencias_al_transcurrir_dos_dias) {
     Competencia comp_dos_segundo_dia = Competencia(deportes[3], Genero::Masculino, participantes_cuarta);
 
 
-    JJOO jo = JJOO(2016, atletas, {{comp_uno_primer_dia,  comp_dos_primer_dia},
+    JJOO jo = JJOO(2016, atletas, {{comp_uno_primer_dia, comp_dos_primer_dia},
                                    {comp_uno_segundo_dia, comp_dos_segundo_dia}});
 
     ASSERT_TRUE(mismos(jo.competencias(),
                        {comp_uno_primer_dia, comp_dos_primer_dia, comp_uno_segundo_dia, comp_dos_segundo_dia}));
     ASSERT_TRUE(mismos(jo.atletas(), atletas));
 
+
     comp_uno_primer_dia.finalizar({0, 2, 1}, {{0, true},
                                               {2, true}}); //Como los atletas 0 y 2 tienen dopping positivo, el ganador de la medalla de oro es el atleta 1 con capacidad 0 -> steven!
     comp_dos_primer_dia.finalizar({3, 1, 0}, {{0, false}});
+
 
     jo._cronograma[0][0].finalizar({0, 2, 1}, {{0, true},
                                                {2, true}});
     jo._cronograma[0][1].finalizar({3, 1, 0}, {{0, false}});
 
-    //ASSERT_EQ(comp_uno_primer_dia.ranking(), {0,2,1});
+    //ASSERT_TRUE((comp_uno_primer_dia.ranking() == {0,2,1}));
     comp_uno_primer_dia.sancionarTramposos();
-    //ASSERT_EQ(comp_uno_primer_dia.ranking(), {1});
+    jo._cronograma[0][0].sancionarTramposos();
+    //ASSERT_TRUE(comp_uno_primer_dia.ranking() == {1});
 
     jo.transcurrirDia();
 
@@ -175,7 +185,6 @@ TEST(jjoo_tests, competencias_al_transcurrir_dos_dias) {
     comp_dos_segundo_dia.finalizar({0, 1}, {});
     jo._cronograma[1][0].finalizar({}, {});
     jo._cronograma[1][1].finalizar({0, 1}, {});
-
 
     jo.transcurrirDia();
 
@@ -189,17 +198,16 @@ TEST(jjoo_tests, competencias_al_transcurrir_dos_dias) {
         ASSERT_TRUE(finaliza_correctamente(jo.competenciasFinalizadasConOroEnPodio()[2]));
         ASSERT_TRUE(finaliza_correctamente(jo.competenciasFinalizadasConOroEnPodio()[0]));
         ASSERT_TRUE(finaliza_correctamente(jo.competenciasFinalizadasConOroEnPodio()[1]));
-
     }
 
-    std::vector<int> a = {2, 2, 2};
-    std::vector<int> b = {1, 1, 0};
+    std::vector<int> a = {2, 2, 1};
+    std::vector<int> b = {1, 0, 0};
     vector<pair<Pais, vector<int> > > medallero = {std::make_pair(paises[0], a), std::make_pair(paises[1], b)};
-    ASSERT_EQ(jo.medallero(), medallero);
+    ASSERT_EQ(medallero, jo.medallero());
 }
 
 TEST(jjoo_tests, sequias_olimpicas_y_los_mas_fracasados) {
-    //Nota util: Los indices de los paises se corresponden con el indice de los atletas, si el atleta 0 gano una medalla es porque el pais 0 gano una medalla (de nada)
+    //Nota util: Los indices de los paises se corresponden con el indice de los atletas, si el atleta 0 gano una medalla es porque el pais 0 gano una medalla
     std::vector<Atleta> atletas;
 
     atletas.emplace_back(paises[0] + std::to_string(0), Genero::Femenino, 1620, paises[0], atletas.size());
@@ -207,7 +215,7 @@ TEST(jjoo_tests, sequias_olimpicas_y_los_mas_fracasados) {
     atletas.emplace_back(paises[2] + std::to_string(0), Genero::Femenino, 1620, paises[2], atletas.size());
 
     auto atletas_para_el_juego = atletas;
-    atletas_para_el_juego.emplace_back(paises[0] + std::to_string(0), Genero::Femenino, 1620, paises[2],
+    atletas_para_el_juego.emplace_back(paises[0] + std::to_string(0), Genero::Femenino, 1620, paises[0],
                                        atletas.size()); //Este atleta deberia estar de paseo
 
     std::vector<Competencia> competencias;
@@ -225,6 +233,7 @@ TEST(jjoo_tests, sequias_olimpicas_y_los_mas_fracasados) {
 
     JJOO jo = JJOO(1920, atletas_para_el_juego, cronograma);
 
+    ASSERT_EQ(cronograma, jo._cronograma);
     //Sequia: 0 - 0 - 0
     jo._cronograma[0][0].finalizar({0}, {});
     jo.transcurrirDia();//Sequia: 1 - 2 - 2
@@ -237,6 +246,7 @@ TEST(jjoo_tests, sequias_olimpicas_y_los_mas_fracasados) {
     jo._cronograma[2][0].finalizar({1}, {});
     jo.transcurrirDia();//Sequia: 2 - 1 - 4
     ASSERT_TRUE(mismos(jo.sequiaOlimpica(), {paises[2]}));
+
     jo._cronograma[3][0].finalizar({1}, {});
     jo.transcurrirDia();//Sequia: 3 - 1 - 5
     jo._cronograma[4][0].finalizar({1}, {});
@@ -257,11 +267,13 @@ TEST(jjoo_tests, sequias_olimpicas_y_los_mas_fracasados) {
     jo.transcurrirDia();//Sequia: 1 - 2 - 5
     ASSERT_TRUE(mismos(jo.sequiaOlimpica(), {paises[0], paises[2]}));
 
-    ASSERT_TRUE(mismos(jo.dePaseo(), {atletas[3]}));
+
+    ASSERT_TRUE(mismos(jo.dePaseo(), {atletas_para_el_juego[3]}));
 }
 
+
 TEST(jjoo_tests, hay_un_patron) {
-    //Nota util:    Los indices de los paises se corresponden con el indice de los atletas, si el atleta 0 gano una medalla es porque el pais 0 gano una medalla (de nada)
+    //Nota util:    Los indices de los paises se corresponden con el indice de los atletas, si el atleta 0 gano una medalla es porque el pais 0 gano una medalla
     //              Por otro lado los indices de los deportes se corresponden con los indices de las fechas
 
     std::vector<Atleta> atletas;
@@ -283,6 +295,8 @@ TEST(jjoo_tests, hay_un_patron) {
     }
 
     JJOO jo = JJOO(1920, atletas, cronograma);
+
+    ASSERT_EQ(cronograma, jo._cronograma);
 
     jo._cronograma[0][0].finalizar({0}, {});
     jo.transcurrirDia();
@@ -306,23 +320,26 @@ TEST(jjoo_tests, hay_un_patron) {
     jo.transcurrirDia();
     jo._cronograma[9][0].finalizar({0}, {});
     jo.transcurrirDia();
+
     ASSERT_TRUE(jo.uyOrdenadoAsiHayUnPatron());
-    vector<pair<Pais, vector<int> > > medallero = {std::make_pair(paises[0], (std::vector<int>) {5, 0, 0}),
+    vector<pair<Pais, vector<int> > > medallero = {std::make_pair(paises[0], (std::vector<int>) {4, 0, 0}),
                                                    std::make_pair(paises[1], (std::vector<int>) {3, 0, 0}),
                                                    std::make_pair(paises[2], (std::vector<int>) {3, 0, 0})};
+
     ASSERT_TRUE(jo.medallero() == medallero);
 
     //Boicot a Argentina en el oro que gano en la cuarta fecha de los juegos
-    jo.boicotPorDisciplina(std::make_pair(deportes[3], Genero::Masculino), paises[0]);
+    jo.boicotPorDisciplina(std::make_pair(deportes[3], Genero::Femenino), paises[0]);
 
     medallero = {std::make_pair(paises[0], (std::vector<int>) {3, 0, 0}),
                  std::make_pair(paises[1], (std::vector<int>) {3, 0, 0}),
                  std::make_pair(paises[2], (std::vector<int>) {3, 0, 0})};
 
-
     ASSERT_TRUE(jo.medallero() == medallero);
+
     ASSERT_TRUE(
             jo.uyOrdenadoAsiHayUnPatron()); //En la cuarta fecha nadie gano nada y lexicograficamente Argentina deberia quedar primera
+
 }
 
 TEST(jjoo_tests, liu_song) {
@@ -331,9 +348,12 @@ TEST(jjoo_tests, liu_song) {
     atletas[0].entrenarNuevoDeporte(deportes[0], 50);
     Competencia comp = Competencia(deportes[0], Genero::Masculino, atletas);
 
-    JJOO jo = JJOO(2016, atletas, {{comp}});
+    std::vector<std::vector<Competencia>> cronograma = {{comp}};
+    JJOO jo = JJOO(2016, atletas, cronograma);
 
-    jo.cronograma(1)[0].finalizar({0}, {});
+    ASSERT_EQ(cronograma, jo._cronograma);
+
+    jo._cronograma[0][0].finalizar({0}, {});
 
     ASSERT_TRUE(mismos(jo.medallero(), {{paises[0], {1, 0, 0}}}));
 

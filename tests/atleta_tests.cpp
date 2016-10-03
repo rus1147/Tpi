@@ -22,7 +22,7 @@ TEST(atleta_tests, observador_deportes) {
     atleta.entrenarNuevoDeporte(deportes[1], 90);
     atleta.entrenarNuevoDeporte(deportes[2], 99);
 
-    std::vector<Deporte> los_deportes_del_atleta = {deportes[0], deportes[1], deportes[2]};
+    std::vector<Deporte> los_deportes_del_atleta = {deportes[0], deportes[1], deportes[2], deportes[12]};
 
     ASSERT_EQ(los_deportes_del_atleta.size(), atleta.deportes().size());
     ASSERT_TRUE(atleta.deportes() == los_deportes_del_atleta);
@@ -124,4 +124,3 @@ TEST(atleta_tests, igualdad_atleta_luego_de_agregar_y_reentrenar_deportes) {
 
     ASSERT_FALSE(atleta == otro_atleta_igual);
 }
-

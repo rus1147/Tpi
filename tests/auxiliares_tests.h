@@ -51,31 +51,16 @@ void quitar(std::vector<T> &v, int index) {
 
 template<class T>
 bool mismos(const vector<T> &l1, const vector<T> &l2) {
-    int i = 0, j;
-    while (i < (int) l1.size()) {
-        int c1 = 0, c2 = 0;
-        j = 0;
-        while (j < (int) l1.size()) {
-            if (l1[j] == l1[i]) {
-                c1++;
-            }
-            j++;
-        }
-        j = 0;
-        while (j < (int) l2.size()) {
-            if (l2[j] == l1[i]) {
-                c2++;
-            }
-            j++;
-        }
-        if (c1 != c2) {
-            return false;
-        }
-        i++;
-    }
-    return true;
-}
+    bool todos_iguales = true;
+    for (const auto &e: l1) {
+        int c1 = std::count(l1.begin(), l1.end(), e);
+        int c2 = std::count(l2.begin(), l2.end(), e);
 
+        todos_iguales &= (c1 == c2);
+    }
+
+    return (l1.size() == l2.size()) && todos_iguales;
+}
 
 template<class T>
 bool pertenece(const std::vector<T> &v, const T &e) {
