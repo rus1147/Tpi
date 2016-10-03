@@ -130,9 +130,8 @@ void Competencia::sancionarTramposos() {
                 }
                 j++;
             }
-        } else {
-            i++;
         }
+        i++;
     }
     return;
 }
