@@ -154,7 +154,56 @@ std::ostream &operator>>(std::ostream &os, const Competencia &c) {
 }
 
 bool Competencia::operator==(const Competencia &c) const {
-    return true && (true || false);
+    if(this->_participantes.size() != c.participantes().size()){
+        return false;
+    }
+    bool hayIguales = false;
+    int i=0;
+    while(i<this->_participantes.size()){
+        int j=0;
+        while(j<c.participantes().size()){
+            if(this->_participantes[i] == c.participantes()[j]){
+                hayIguales = true;
+            }
+            j++;
+        }
+        if(!hayIguales){
+            return false;
+        } else {
+            hayIguales = false;
+        }
+        i++;
+    }
+    if(this->_categoria != c.categoria() || this->_finalizada != c.finalizada()){
+        return false;
+    }
+    if(this->_finalizada){
+        if(this->_ranking != c.ranking()){
+            return false;
+        }
+        if(this->_lesTocoControlAntiDoping.size() != c.lesTocoControlAntiDoping().size()){
+            return false;
+        }
+        hayIguales = false;
+        i = 0;
+        while(i<this->_lesTocoControlAntiDoping.size()){
+            int j=0;
+            while(j<c.lesTocoControlAntiDoping().size()){
+                if(this->_lesTocoControlAntiDoping[i].first == c.lesTocoControlAntiDoping()[j] &&
+                        this->_lesTocoControlAntiDoping[i].second == c.leDioPositivo(c.lesTocoControlAntiDoping()[j])){
+                    hayIguales = true;
+                }
+                j++;
+            }
+            if(!hayIguales){
+                return false;
+            } else {
+                hayIguales = false;
+            }
+            i++;
+        }
+    }
+    return true;
 }
 
 Competencia Competencia::operator=(const Competencia &c) {
