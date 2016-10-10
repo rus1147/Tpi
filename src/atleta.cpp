@@ -71,18 +71,21 @@ void Atleta::entrenarNuevoDeporte(const Deporte &d, const int &c) {
         this->_deportesAsignados = true;
         this->_deportes = vector<pair<Deporte, int>> (0);
     }
+    pair<Deporte, int> deporteAux1 (d, c);
+    pair<Deporte, int> deporteAux2 (d, c);
     int i = 0;
     while(i < this->_deportes.size()){
-        if(this->_deportes[i].first > d){
-            this->_deportes.insert(this->_deportes.begin()+i, pair<Deporte, int> (d,c));
-            return;
-        } else if(this->_deportes[i].first == d){
-            this->_deportes[i] = pair<Deporte, int> (d,c);
+        if(this->_deportes[i].first > deporteAux1.first){
+            deporteAux1 = this->_deportes[i];
+            this->_deportes[i] = deporteAux2;
+            deporteAux2 = deporteAux1;
+        } else if(this->_deportes[i].first == deporteAux1.first){
+            this->_deportes[i] = deporteAux1;
             return;
         }
         i++;
     }
-    this->_deportes.push_back(pair<Deporte, int> (d,c));
+    this->_deportes.push_back(deporteAux1);
     return;
 }
 
