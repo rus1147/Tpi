@@ -47,13 +47,53 @@ vector<Competencia> JJOO::competencias() const {
 
 vector<Competencia> JJOO::competenciasFinalizadasConOroEnPodio() const {
     vector<Competencia> ret;
+    int j = 0;
+    int i = 0;
+    while(j< this-> _cronograma.size()){
+        while(i< this-> _cronograma[j].size()){
+            if(_cronograma[j][i].finalizada() && _cronograma[j][i].ranking().size() >0){
+                ret.push_back(this-> _cronograma[j][i]);
+            }
+            i++;
+        }
+        j++;
+    }
     return ret;
 }
 
-vector<Atleta> JJOO::dePaseo() const {
-    vector<Atleta> ret;
+vector<Atleta> JJOO::dePaseo() const {    vector<Atleta> ret;
+    ret = _atletas;
+    vector<Competencia> com;
+    int j = 0;
+    int i = 0;
+    while(j< this-> _cronograma.size()){
+        while(i< this-> _cronograma[j].size()){
+            com.push_back(this-> _cronograma[j][i]);
+            i++;
+        }
+        j++;
+    }
+    i = 0;
+    while(i < ret.size()){
+        j = 0;
+        while(j < com.size()){
+            int k = 0;
+            while(k < com[j].participantes().size()){
+                if(ret[i].ciaNumber() == com[j].participantes()[k].ciaNumber()){
+                    ret.erase(ret.begin()+i);
+                }
+                else{
+                    k++;
+                }
+            }
+            j++;
+        }
+        i++;
+    }
     return ret;
 }
+
+
 
 vector<pair<Pais, vector<int> > > JJOO::medallero() const {
     vector<pair<Pais, vector<int> > > ret;
