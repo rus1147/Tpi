@@ -9,7 +9,7 @@ Competencia::Competencia(const Deporte &d, const Genero &g, const vector<Atleta>
         int j= 0;
         while(j<as.size()){
             if(as[i].ciaNumber() == as[j].ciaNumber() && i != j){
-                atletas.erase(atletas.begin()+j);
+                atletas = this->_atletasSinPosicion(atletas, j);
             }
             j++;
         }
@@ -101,7 +101,7 @@ void Competencia::linfordChristie(const int &n) {
     int i=0;
     while(i<this->_participantes.size()){
         if(this->_participantes[i].ciaNumber()==n){
-            this->_participantes.erase(this->_participantes.begin()+i);
+            this->_participantes = this->_atletasSinPosicion(this->_participantes, i);
         }
         i++;
     }
@@ -126,7 +126,7 @@ void Competencia::sancionarTramposos() {
             int j=0;
             while(j<this->_ranking.size()){
                 if(this->_ranking[j].ciaNumber() == this->_lesTocoControlAntiDoping[i].first.ciaNumber()){
-                    this->_ranking.erase(this->_ranking.begin()+j);
+                    this->_ranking = this->_atletasSinPosicion(this->_ranking, j);
                 }
                 j++;
             }
@@ -213,4 +213,20 @@ Competencia Competencia::operator=(const Competencia &c) {
     _ranking = c._ranking;
     _lesTocoControlAntiDoping = c._lesTocoControlAntiDoping;
     return (*this);
+}
+
+
+vector<Atleta> Competencia::_atletasSinPosicion(const vector<Atleta> &vec, int &i){
+    Atleta atleta("Jorge",Genero::Masculino,1990,"Argentina",1);
+    std::vector<Atleta> newVec (vec.size() - 1, atleta);
+    int j=0;
+    while (j < vec.size() - 1){
+        if(j < i){
+            newVec[j] = vec[j];
+        } else if(j >= i) {
+            newVec[j] = vec[j+1];
+        }
+        j++;
+    }
+    return newVec;
 }

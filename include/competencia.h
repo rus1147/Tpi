@@ -13,6 +13,7 @@ private:
     bool _finalizada;
     vector<Atleta> _ranking;
     vector<pair<Atleta, bool> > _lesTocoControlAntiDoping;
+    vector<Atleta> _atletasSinPosicion(const vector<Atleta> &vec, int &i);
 
 public:
     Competencia(const Deporte &d, const Genero &g, const vector<Atleta> &as);
