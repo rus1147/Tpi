@@ -14,6 +14,9 @@ private:
     vector<vector<Competencia> > _cronograma;
     int _jornadaActual;
 
+
+
+
     friend class jjoo_tests_competencias_al_transcurrir_un_dia_Test;
 
     friend class jjoo_tests_competencias_al_transcurrir_dos_dias_Test;
@@ -62,6 +65,7 @@ public:
     bool operator==(const JJOO &j) const;
 
     JJOO operator=(const JJOO &j);
+
 
     //Entrada y salida
     void mostrar(std::ostream &os) const;
