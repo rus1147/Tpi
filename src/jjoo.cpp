@@ -20,7 +20,7 @@ vector<Atleta> JJOO::atletas() const {
 }
 
 int JJOO::cantDias() const {
-    return this->_cronograma.size();
+    return int(this->_cronograma.size());
 }
 
 int JJOO::jornadaActual() const {
@@ -227,7 +227,7 @@ vector<pair<Pais, vector<int> > > JJOO::medallero() const {
         cant = 0;
         while(k < atletasDeBronce.size()){
             if(paisesDeGanadores[i] == atletasDeBronce[k].first.nacionalidad()){
-                cant = cant + atletasDeBronce[k].second);
+                cant = cant + atletasDeBronce[k].second;
             }
             k++;
         }
@@ -248,7 +248,35 @@ vector<pair<Pais, vector<int> > > JJOO::medallero() const {
 }
 
 int JJOO::boicotPorDisciplina(const Categoria &c, const Pais &p) {
-    return 0;
+    int i = 0;
+    vector<Competencia> todasLasCompetencias;
+    while(i < this->_cronograma.size()){
+        int j = 0;
+        while(j < this->_cronograma[i].size()){
+            todasLasCompetencias.push_back(this->_cronograma[i][j]);
+            j++;
+        }
+        i++;
+    }
+    i = 0;
+    vector<Atleta> CatSinPaisP;
+    int r = 0;
+    while(i < todasLasCompetencias.size() && i != -1){
+        r = int(todasLasCompetencias[i].participantes().size());
+        if(todasLasCompetencias[i].categoria() == c){
+            int j = 0;
+            while(todasLasCompetencias[i].participantes()[j].nacionalidad() != p){
+                CatSinPaisP.push_back(todasLasCompetencias[i].participantes()[j]);
+                j++;
+            }
+            todasLasCompetencias[i].participantes() = CatSinPaisP;
+            i = -1;
+        }
+        else{
+            i++;
+        }
+    }
+    return r - int(CatSinPaisP.size());
 }
 
 vector<Atleta> JJOO::losMasFracasados(const Pais &p) const {
