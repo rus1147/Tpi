@@ -102,8 +102,8 @@ std::ostream &operator<<(std::ostream &os, const Atleta &a) {
     return os;
 }
 
-std::ostream &operator>>(std::ostream &os, const Atleta &a) {
-    return os;
+std::istream &operator>>(std::istream &is, Atleta &a); {
+    return is;
 }
 
 bool Atleta::operator==(const Atleta &a) const {

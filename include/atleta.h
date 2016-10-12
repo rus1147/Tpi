@@ -51,6 +51,6 @@ public:
 
 std::ostream &operator<<(std::ostream &os, const Atleta &a);
 
-std::ostream &operator>>(std::ostream &os, const Atleta &a);
+std::istream &operator>>(std::istream &is, Atleta &a);
 
 #endif /*__ATLETA__*/
