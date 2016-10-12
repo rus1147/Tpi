@@ -125,6 +125,7 @@ vector<pair<Pais, vector<int> > > JJOO::medallero() const {
     vector <Pais> paisesDeGanadores;
     paisesDeGanadores.push_back(atletasGanadores[0].nacionalidad());
     //le estoy agregando el primer elemento y despues me fijo que los que voy a agregar no esten
+    i = 0;
     while(i+1 < atletasGanadores.size()){
         int k = 0;
         int l = 0;
@@ -137,6 +138,7 @@ vector<pair<Pais, vector<int> > > JJOO::medallero() const {
         if(l == 0){
             paisesDeGanadores.push_back(atletasGanadores[i+1].nacionalidad());
         }
+        i++;
     }
 
     //ATLETASDEORO ATLETASDEPLATA & ATLETASDEBRONCE NO TIENEN REPETIDOS POR COMO ESTAN FILTRADOS
@@ -145,6 +147,7 @@ vector<pair<Pais, vector<int> > > JJOO::medallero() const {
     pair<Atleta,int > AtletaYMedalla;
     //Vector de cantidad Oro
     vector<pair<Atleta, int >> atletasDeOro;
+    i = 0;
     while(i < _atletas.size()){
         int k = 0;
         while(j < comFinalizadas.size()){
@@ -156,9 +159,12 @@ vector<pair<Pais, vector<int> > > JJOO::medallero() const {
         AtletaYMedalla.first = this ->_atletas[i];
         AtletaYMedalla.second = k;
         atletasDeOro.push_back(AtletaYMedalla);
+        i++;
     }
     //Vector de cantidad Plata
     vector<pair<Atleta, int >> atletasDePlata;
+    i = 0;
+    j = 0;
     while(i < _atletas.size()){
         int k = 0;
         while(j < comFinalizadas.size()){
@@ -170,9 +176,12 @@ vector<pair<Pais, vector<int> > > JJOO::medallero() const {
         AtletaYMedalla.first = this ->_atletas[i];
         AtletaYMedalla.second = k;
         atletasDePlata.push_back (AtletaYMedalla);
+        i++;
     }
     //Vector de cantidad Bronce
     vector<pair<Atleta,int >> atletasDeBronce;
+    i = 0;
+    j = 0;
     while(i < _atletas.size()){
         int k = 0;
         while(j < comFinalizadas.size()){
@@ -184,21 +193,25 @@ vector<pair<Pais, vector<int> > > JJOO::medallero() const {
         AtletaYMedalla.first = this ->_atletas[i];
         AtletaYMedalla.second = k;
         atletasDeBronce.push_back (AtletaYMedalla);
+        i++;
     }
     //TOMO LOS ATLETAS QUE GANARON ALGUNA MEDALLA Y LES AGREGO LAS MEDALLAS QUE OBTUVIERON 
     //Variable de soporte
     pair<Pais, vector <int>> PaisYMedallas;
     vector<pair<Pais, vector <int>>> atletasConSusMedallas ;
     vector <int> medals;
-    while(i < paisesDeGanadores.size()){
+    i = 0;
+    while(i < paisesDeGanadores.size()) {
         int k = 0;
         int cant = 0;
-        while(k < atletasDeOro.size()){
-            if(paisesDeGanadores[i] == atletasDeOro[k].first.nacionalidad()){
+        while (k < atletasDeOro.size()) {
+            if (paisesDeGanadores[i] == atletasDeOro[k].first.nacionalidad()) {
                 cant = cant + atletasDeOro[k].second;
             }
             k++;
         }
+        //UNA VEZ TERMINADO EL CICLO, MEDALS RECIVE SU PRIMER ELEMENTO PARA EL PAIS "I-ESIMO"
+        //Y LAS VARIABLES SE REESTABLECEN, MENOS I PORQUE RECORRE LOS PASISES
         medals.push_back(cant);
         k = 0;
         cant = 0;
@@ -208,6 +221,7 @@ vector<pair<Pais, vector<int> > > JJOO::medallero() const {
             }
             k++;
         }
+        //UNA VEZ TERMINADO EL CICLO, MEDALS RECIVE SU SEGUNDO ELEMENTO PARA EL PAIS "I-ESIMO"
         medals.push_back(cant);
         k = 0;
         cant = 0;
@@ -217,13 +231,15 @@ vector<pair<Pais, vector<int> > > JJOO::medallero() const {
             }
             k++;
         }
+        //UNA VEZ TERMINADO EL CICLO, MEDALS RECIVE SU TERCER ELEMENTO PARA EL PAIS "I-ESIMO"
         medals.push_back(cant);
+        //EN LA VARIABLE AUXILIAR (PaisYMedallas)DEFINO LOS ELEMENTOS QUE VOY A METER EN "atletasConSusMedallas"
+        //PasisYMedallas por ser "Pair", en cada vuelta se pisan los valores (no hace falta limpiarlo para que entre al ciclo)
         PaisYMedallas.first = paisesDeGanadores[i];
         PaisYMedallas.second = medals;
         atletasConSusMedallas.push_back(PaisYMedallas);
+        //LIMPIO AUXILIAR(medals), PARA PODER USARLO CUANDO ENTRE AL CICLIO CON EL PAIS "(i+1)-IESIMO"
         medals.clear();
-        //falta limpiar el vector(PaisYMedallas) :( para que vuelva al ciclo y poder tomar los nuevos valores
-        PaisYMedallas.clear();
         i++;
     }
     //Falta terminar el ordenamiento segun la especificacion de medalleros
