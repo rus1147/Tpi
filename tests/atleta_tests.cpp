@@ -42,7 +42,7 @@ TEST(atleta_tests, observador_capacidad) {
 
 }
 
-TEST(atleta_tests, igualdad_de_atleta_sin_deportes) {
+TEST(atleta_tests, igualdad_de_atleta_que_solo_practica_tennis) {
     Atleta atleta("Nole", Genero::Masculino, 1983, "Serbia", 5);
     Atleta otro_atleta_igual("Nole", Genero::Masculino, 1983, "Serbia", 5);
     Atleta otro_atleta_distinto("Nole", Genero::Femenino, 1983, "Serbia", 5);

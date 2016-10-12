@@ -89,6 +89,7 @@ TEST(jjoo_tests, competencias_al_transcurrir_un_dia) {
     ASSERT_TRUE(mismos(jo.atletas(), atletas));
 
     jo.transcurrirDia();
+    jo._cronograma[0][0].sancionarTramposos();
 
     ASSERT_TRUE(mismos(jo.atletas(), atletas));
     ASSERT_EQ(2, jo.jornadaActual());
@@ -214,6 +215,12 @@ TEST(jjoo_tests, sequias_olimpicas_y_los_mas_fracasados) {
     atletas.emplace_back(paises[1] + std::to_string(0), Genero::Femenino, 1620, paises[1], atletas.size());
     atletas.emplace_back(paises[2] + std::to_string(0), Genero::Femenino, 1620, paises[2], atletas.size());
 
+    for (size_t i = 0; i < 10; i++) {
+        atletas[0].entrenarNuevoDeporte(deportes[i], 100);
+        atletas[1].entrenarNuevoDeporte(deportes[i], 100);
+        atletas[2].entrenarNuevoDeporte(deportes[i], 100);
+    }
+
     auto atletas_para_el_juego = atletas;
     atletas_para_el_juego.emplace_back(paises[0] + std::to_string(0), Genero::Femenino, 1620, paises[0],
                                        atletas.size()); //Este atleta deberia estar de paseo
@@ -221,11 +228,7 @@ TEST(jjoo_tests, sequias_olimpicas_y_los_mas_fracasados) {
     std::vector<Competencia> competencias;
     std::vector<std::vector<Competencia>> cronograma;
 
-    for (size_t i = 0; i < 10; i++) {
-        atletas[0].entrenarNuevoDeporte(deportes[i], 100);
-        atletas[1].entrenarNuevoDeporte(deportes[i], 100);
-        atletas[2].entrenarNuevoDeporte(deportes[i], 100);
-    }
+
     for (size_t i = 0; i < 10; i++) {
         competencias.emplace_back(deportes[i], Genero::Femenino, atletas);
         cronograma.push_back({competencias.back()});
@@ -337,8 +340,8 @@ TEST(jjoo_tests, hay_un_patron) {
 
     ASSERT_TRUE(jo.medallero() == medallero);
 
-    ASSERT_TRUE(
-            jo.uyOrdenadoAsiHayUnPatron()); //En la cuarta fecha nadie gano nada y lexicograficamente Argentina deberia quedar primera
+    ASSERT_FALSE(
+            jo.uyOrdenadoAsiHayUnPatron()); //En la cuarta fecha nadie gano nada, se deberia omitir
 
 }
 
