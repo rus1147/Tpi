@@ -58,7 +58,6 @@ bool mismos(const vector<T> &l1, const vector<T> &l2) {
     for (const auto &e: l1) {
         int c1 = int(std::count(l1.begin(), l1.end(), e));
         int c2 = int(std::count(l2.begin(), l2.end(), e));
-
         todos_iguales &= (c1 == c2);
     }
 

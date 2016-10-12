@@ -121,6 +121,24 @@ vector<pair<Pais, vector<int> > > JJOO::medallero() const {
         }
         i++;
     }
+    //vector con los paises de los atletas ganadores
+    vector <Pais> paisesDeGanadores;
+    paisesDeGanadores.push_back(atletasGanadores[0].nacionalidad());
+    //le estoy agregando el primer elemento y despues me fijo que los que voy a agregar no esten
+    while(i+1 < atletasGanadores.size()){
+        int k = 0;
+        int l = 0;
+        while(k < paisesDeGanadores.size()){
+            if(paisesDeGanadores[k] == atletasGanadores[i+1].nacionalidad()){
+                l++;
+                }
+            k++;
+        }
+        if(l == 0){
+            paisesDeGanadores.push_back(atletasGanadores[i+1].nacionalidad());
+        }
+    }
+
     //ATLETASDEORO ATLETASDEPLATA & ATLETASDEBRONCE NO TIENEN REPETIDOS POR COMO ESTAN FILTRADOS
     //Y CONTEMPLAN EL CASO EN EL QUE UN JUGADOR GANA UNA SOLA MEDALLA Y "0" EN LAS OTRAS LISTAS
     //Variable de soporte
@@ -171,33 +189,41 @@ vector<pair<Pais, vector<int> > > JJOO::medallero() const {
     //Variable de soporte
     pair<Pais, vector <int>> PaisYMedallas;
     vector<pair<Pais, vector <int>>> atletasConSusMedallas ;
-    i = 0;
     vector <int> medals;
-    while(i < atletasGanadores.size()){
+    while(i < paisesDeGanadores.size()){
         int k = 0;
+        int cant = 0;
         while(k < atletasDeOro.size()){
-            if(atletasGanadores[i].ciaNumber()== atletasDeOro[k].first.ciaNumber()){
-                medals.push_back(atletasDeOro[k].second);
-                atletasConSusMedallas.push_back(PaisYMedallas);
+            if(paisesDeGanadores[i] == atletasDeOro[k].first.nacionalidad()){
+                cant = cant + atletasDeOro[k].second;
             }
             k++;
         }
+        medals.push_back(cant);
+        k = 0;
+        cant = 0;
         while(k < atletasDePlata.size()){
-            if(atletasGanadores[i].ciaNumber()== atletasDePlata[k].first.ciaNumber()){
-                medals.push_back(atletasDePlata[k].second);
+            if(paisesDeGanadores[i] == atletasDePlata[k].first.nacionalidad()){
+                cant = cant + atletasDePlata[k].second;
             }
             k++;
         }
+        medals.push_back(cant);
+        k = 0;
+        cant = 0;
         while(k < atletasDeBronce.size()){
-            if(atletasGanadores[i].ciaNumber()== atletasDeBronce[k].first.ciaNumber()){
-                medals.push_back(atletasDeBronce[k].second);
+            if(paisesDeGanadores[i] == atletasDeBronce[k].first.nacionalidad()){
+                cant = cant + atletasDeBronce[k].second);
             }
             k++;
         }
-        PaisYMedallas.first = atletasGanadores[i].nacionalidad();
+        medals.push_back(cant);
+        PaisYMedallas.first = paisesDeGanadores[i];
         PaisYMedallas.second = medals;
         atletasConSusMedallas.push_back(PaisYMedallas);
         medals.clear();
+        //falta limpiar el vector(PaisYMedallas) :( para que vuelva al ciclo y poder tomar los nuevos valores
+        PaisYMedallas.clear();
         i++;
     }
     //Falta terminar el ordenamiento segun la especificacion de medalleros
