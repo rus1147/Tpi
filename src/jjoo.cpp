@@ -387,8 +387,48 @@ void JJOO::liuSong(const Atleta &a, const Pais &p) {
 }
 
 Atleta JJOO::stevenBradbury() const {
-    Atleta ret("Bob esponja", Genero::Masculino, 0, "Pais falso", 0);
-    return ret;
+// BUSCO LAS COMPETENCIAS FINALIZADAS
+    int j = 0;
+    int i = 0;
+    vector<Competencia> comFinalizadas;
+    while(j< this-> _cronograma.size()){
+        while(i< this-> _cronograma[j].size()){
+            if(_cronograma[j][i].finalizada()){
+                comFinalizadas.push_back(this-> _cronograma[j][i]);
+            }
+            i++;
+        }
+        j++;
+    }
+
+    i = 0;
+    pair<Atleta,int> ganadorYCapacidad;
+    vector<pair<Atleta,int>> ganadoresYCapacidad;
+    while(i < comFinalizadas.size()){
+        if(comFinalizadas[i].ranking().size() > 0){
+            ganadorYCapacidad.first = comFinalizadas[i].ranking()[0];
+            ganadorYCapacidad.second = comFinalizadas[i].ranking()[0].capacidad(comFinalizadas[i].categoria().first);
+        }
+        ganadoresYCapacidad.push_back(ganadorYCapacidad);
+        i++;
+    }
+
+    i =0;
+    int minCap = ganadoresYCapacidad[0].second;
+    while(i < ganadoresYCapacidad.size()){
+        if(minCap > ganadoresYCapacidad[i].second){
+            minCap = ganadoresYCapacidad[i].second;
+        }
+        i++;
+    }
+
+    i = 0;
+    while(i < ganadoresYCapacidad.size()){
+        if(ganadoresYCapacidad[i].second == minCap){
+            return ganadoresYCapacidad[i].first;
+        }
+    }
+    return ganadoresYCapacidad[0].first;
 }
 
 bool JJOO::uyOrdenadoAsiHayUnPatron() const {
