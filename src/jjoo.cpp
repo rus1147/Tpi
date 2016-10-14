@@ -259,8 +259,8 @@ int JJOO::boicotPorDisciplina(const Categoria &c, const Pais &p) {
         i++;
     }
     i = 0;
-    vector<Atleta> CatSinPaisP;
     int r = 0;
+    vector<Atleta> CatSinPaisP;
     while(i < todasLasCompetencias.size() && i != -1){
         r = int(todasLasCompetencias[i].participantes().size());
         if(todasLasCompetencias[i].categoria() == c){
@@ -280,7 +280,105 @@ int JJOO::boicotPorDisciplina(const Categoria &c, const Pais &p) {
 }
 
 vector<Atleta> JJOO::losMasFracasados(const Pais &p) const {
+    int j = 0;
+    int i = 0;
+// BUSCO LAS COMPETENIAS FINALIZADAS
+    vector<Competencia> comFinalizadas;
+    while(j< this-> _cronograma.size()){
+        while(i< this-> _cronograma[j].size()){
+            if(_cronograma[j][i].finalizada()){
+                comFinalizadas.push_back(this-> _cronograma[j][i]);
+            }
+            i++;
+        }
+        j++;
+    }
+// BUSCO LOS ATLETAS GANADORES, LOS ATLETAS QUE NO ESTAN EN ESA LISTA VAN A SER LOS QUE NUNCA GANARON
+    j = 0;
+    i = 0;
+    vector<Atleta> atletasGanadores;
+    while (i < _atletas.size()){
+        while(j < comFinalizadas.size()){
+            if(comFinalizadas[j].ranking().size() > 0 && comFinalizadas[j].ranking()[0].ciaNumber() == _atletas[i].ciaNumber()
+               || comFinalizadas[j].ranking().size() > 1 && comFinalizadas[j].ranking()[1].ciaNumber() == _atletas[i].ciaNumber()
+               || comFinalizadas[j].ranking().size() > 2 && comFinalizadas[j].ranking()[2].ciaNumber() == _atletas[i].ciaNumber()  ) {
+                atletasGanadores.push_back(this->_atletas[i]);
+            }
+            j++;
+        }
+        i++;
+    }
+//BUSCP LOS ATLETAS DEL PAIS P
+    vector<Atleta> atletasDeP;
+    i = 0;
+    while(j< _atletas.size()){
+        if(_atletas[i].nacionalidad() == p){
+            atletasDeP.push_back(_atletas[i]);
+        }
+    }
+//TOMO LOS QUE SON DEL PAIS "P" Y NUNCA GANARON
+    i = 0;
+    j = 0;
+    vector<Atleta> PyNuncaGanaron;
+    while(j < atletasDeP.size()){
+        int r = 0;
+        while(i < atletasGanadores.size()){
+            if(atletasDeP[j] == atletasGanadores[i]){
+                r++;
+            }
+            i++;
+        }
+        if(r == 0){
+            PyNuncaGanaron.push_back(atletasDeP[j]);
+        }
+    }
+    //TOMO TODAS LAS COMPETENCIAS (FINALIZADAS O NO, QUIERO CONTAR LAS VECES QUE APARECE COMO PARTICIPANTE)
+    vector<Competencia> allCom;
+    i = 0;
+    while(i < this->_cronograma.size()){
+        j = 0;
+        while(j < this->_cronograma[i].size()){
+            allCom.push_back(this->_cronograma[i][j]);
+            j++;
+        }
+        i++;
+    }
+//TOMO UNA LISTA DE ATLETAS CON SU CANTIDAD DE APARICIONES
+    i = 0;
+    vector<pair<Atleta,int >> AtletasYCom;
+    pair<Atleta,int > atletaYCom;
+    while(i < PyNuncaGanaron.size() ){
+        j = 0;
+        int cant = 0;
+        while(j < allCom.size()){
+            int k = 0;
+            while(k < allCom[j].participantes().size()){
+                if(PyNuncaGanaron[i] == allCom[j].participantes()[k]){
+                    cant++;
+                }
+            }
+        }
+        atletaYCom.first = PyNuncaGanaron[j];
+        atletaYCom.second = cant;
+        AtletasYCom.push_back(atletaYCom);
+    }
+    //BUSCO LA CANTIDAD MAXIMA QUE APARECEN LOS ATLETAS
+    i = 0;
+    int maxCant = AtletasYCom[0].second;
+    while(i < AtletasYCom.size()){
+        if(maxCant < AtletasYCom[i].second){
+            maxCant = AtletasYCom[i].second;
+        }
+        i++;
+    }
+//FILTRO POR LOS QUE TIENEN LA MAYOR CANTIDAD DE APARICIONES (PARTICIPACIONES EN COMPETENCIAS)
+    i = 0;
     vector<Atleta> ret;
+    while(i < AtletasYCom.size()){
+        if(AtletasYCom[i].second == maxCant){
+            ret.push_back(AtletasYCom[i].first);
+        }
+    }
     return ret;
 }
 
