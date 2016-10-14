@@ -400,7 +400,7 @@ Atleta JJOO::stevenBradbury() const {
         }
         j++;
     }
-
+//ARMO UNA LISTA DE PARES DE ATLETAS GANADORES Y CAPACIDAD QUE TIENEN EN LA COMPETENCIA QUE GANARON
     i = 0;
     pair<Atleta,int> ganadorYCapacidad;
     vector<pair<Atleta,int>> ganadoresYCapacidad;
@@ -412,7 +412,7 @@ Atleta JJOO::stevenBradbury() const {
         ganadoresYCapacidad.push_back(ganadorYCapacidad);
         i++;
     }
-
+//BUSCO LA CAPACIDAD MINIMA DE LOS ATLETAS (EN LAS COMPETENCIAS QUE GANARON)
     i =0;
     int minCap = ganadoresYCapacidad[0].second;
     while(i < ganadoresYCapacidad.size()){
@@ -421,7 +421,7 @@ Atleta JJOO::stevenBradbury() const {
         }
         i++;
     }
-
+//DEVUELVO AL PRIMERO QUE ENCUENTRE CON LA MINIMA CAPACIDAD (CASO CONTRARIO DEVUELVE AL PRIMERO)
     i = 0;
     while(i < ganadoresYCapacidad.size()){
         if(ganadoresYCapacidad[i].second == minCap){
