@@ -102,7 +102,7 @@ std::ostream &operator<<(std::ostream &os, const Atleta &a) {
     return os;
 }
 
-std::istream &operator>>(std::istream &is, Atleta &a); {
+std::istream &operator>>(std::istream &is, Atleta &a) {
     return is;
 }
 

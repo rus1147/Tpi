@@ -451,7 +451,7 @@ bool JJOO::uyOrdenadoAsiHayUnPatron() const {
 // PAISES SIN REPETIDOS
     int i = 0;
     vector<Pais> paises;
-    while(i < _atletas.size()){//jornadaActual
+    while(i < _atletas.size()){
         int r = 0;
         while(j < paises.size()){
             if(_atletas[i].nacionalidad() == paises[j]){
@@ -564,8 +564,84 @@ bool JJOO::uyOrdenadoAsiHayUnPatron() const {
 }
 
 vector<Pais> JJOO::sequiaOlimpica() const {
-    vector<Pais> ret;
-    return ret;
+    // BUSCO LAS COMPETENCIAS FINALIZADAS PORR DIA
+    int j = 0;
+    vector<Competencia> compDelDia;
+    vector< vector<Competencia> >compXDia;
+    while(j< this-> _jornadaActual){
+        compDelDia.clear();
+        int i = 0;
+        while(i< this-> _cronograma[j].size()){
+            if(_cronograma[j][i].finalizada()){
+                compDelDia.push_back(this-> _cronograma[j][i]);
+            }
+            i++;
+        }
+        compXDia.push_back(compDelDia);
+        j++;
+    }
+// PAISES GANADORES CON REPETIDOS
+    int i = 0;
+    vector<Pais> paisesganadorRep;
+    vector<vector<Pais>> paisesXDiaRep;
+    while(i < compXDia.size()){
+        j = 0;
+        paisesganadorRep.clear();
+        while(j < compXDia[i].size()){
+            if(compXDia[i][j].ranking().size() > 2){
+                paisesganadorRep.push_back(compXDia[i][j].ranking()[2].nacionalidad());
+                paisesganadorRep.push_back(compXDia[i][j].ranking()[1].nacionalidad());
+                paisesganadorRep.push_back(compXDia[i][j].ranking()[0].nacionalidad());
+            }
+            else if(compXDia[i][j].ranking().size() > 1){
+                paisesganadorRep.push_back(compXDia[i][j].ranking()[1].nacionalidad());
+                paisesganadorRep.push_back(compXDia[i][j].ranking()[0].nacionalidad());
+            }
+            if(compXDia[i][j].ranking().size() > 0){
+                paisesganadorRep.push_back(compXDia[i][j].ranking()[0].nacionalidad());
+            }
+            j++;
+        }
+        paisesXDiaRep.push_back(paisesganadorRep);
+        i++;
+    }
+//PAISES SIN REPETIDOS(EN ESE DIA) Y GANARON ALGUNA MEDALLA
+    i = 0;
+    vector<Pais> paisesDelDia;
+    vector< vector<Pais> > paisesXDia;
+    while(i < paisesXDiaRep.size()){
+        j = 0;
+        paisesDelDia.clear();
+        while(j < paisesXDiaRep[i].size()){
+            int r = 0;
+            int k = 0;
+            while(k < paisesXDia[i].size()){
+                if(paisesXDiaRep[i][j] == paisesXDia[i][k]){
+                    r++;
+                }
+                k++;
+            }
+            if(r == 0){
+                paisesDelDia.push_back(paisesXDiaRep[i][j]);
+            }
+            j++;
+        }
+        paisesXDia.push_back(paisesDelDia);
+        i++;
+    }
+    i = 0;
+    while(i < paisesXDia.size()){
+        j = 0;
+        while(j < paisesXDia[i].size()){
+            int k = 0;
+            while(k < paisesXDia[k].size()){
+                if(==){
+
+                }
+
+            }
+        }
+    }
 }
 
 void JJOO::transcurrirDia() {
