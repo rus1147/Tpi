@@ -432,6 +432,134 @@ Atleta JJOO::stevenBradbury() const {
 }
 
 bool JJOO::uyOrdenadoAsiHayUnPatron() const {
+// BUSCO LAS COMPETENCIAS FINALIZADAS PORR DIA
+    int j = 0;
+    vector<Competencia> compDelDia;
+    vector< vector<Competencia> >compXDia;
+    while(j< this-> _jornadaActual){
+        compDelDia.clear();
+        int i = 0;
+        while(i< this-> _cronograma[j].size()){
+            if(_cronograma[j][i].finalizada() && _cronograma[j][i].ranking().size() > 0){
+                compDelDia.push_back(this-> _cronograma[j][i]);
+            }
+            i++;
+        }
+        compXDia.push_back(compDelDia);
+        j++;
+    }
+// PAISES SIN REPETIDOS
+    int i = 0;
+    vector<Pais> paises;
+    while(i < _atletas.size()){//jornadaActual
+        int r = 0;
+        while(j < paises.size()){
+            if(_atletas[i].nacionalidad() == paises[j]){
+                r++;
+            }
+            j++;
+        }
+        if(r == 0){
+            paises.push_back(_atletas[i].nacionalidad());
+        }
+        i++;
+    }
+//PARES DE PAISES CON SUS CANTIDAD DE GANADORES
+    pair<Pais,int> PaisYMedals;
+    vector<pair<Pais,int>> PaisesYMedals;
+    vector<vector <pair <Pais,int> > > PaisesYMedalsXDia;
+    i = 0;
+    j = 0;
+    while(j < compXDia.size()){
+        int k = 0;
+        while(k < paises.size()){
+            int r = 0;
+            while(i < compXDia[j].size()){
+                if(compXDia[j][i].ranking()[0].nacionalidad() == paises[k]){
+                    r++;
+                }
+                i++;
+            }
+            PaisYMedals.first = paises[j];
+            PaisYMedals.second = r;
+            PaisesYMedals.push_back(PaisYMedals);
+            k++;
+        }
+        PaisesYMedalsXDia.push_back(PaisesYMedals);
+        j++;
+    }
+//Maximo de apariciones de los paises (en el i-esimo dia) para despues filtrar
+    i = 0;
+    vector<int> maximoXDia;
+    while(i < PaisesYMedalsXDia.size()){
+        j = 0;
+        int k = 0;
+        int cant = 0;
+        while(j < PaisesYMedalsXDia[i].size()){
+            //toma la lista del dia (i-esimo) y la recorre tomando el mayor
+            if(cant < PaisesYMedalsXDia[i][j].second){
+                cant =PaisesYMedalsXDia[i][j].second;
+            }
+            j++;
+        }
+        maximoXDia.push_back(cant);
+        i++;
+    }
+//FILTRAR POR LOS MAXIMO EN CANTIDAD
+    i = 0;
+    vector<Pais> paisesCant;
+    vector< vector<Pais> > PaisesCantXDia;
+    while(i < PaisesYMedalsXDia.size()){
+        paisesCant.clear();
+        while(j < PaisesYMedalsXDia[i].size()){
+            if(maximoXDia[i] == PaisesYMedalsXDia[i][j].second){
+                paisesCant.push_back(PaisesYMedalsXDia[i][j].first);
+            }
+            j++;
+        }
+        PaisesCantXDia.push_back(paisesCant);
+        i++;
+    }
+//FILTRAR COMO SI FUERAN ENTEROS
+    i = 0;
+    vector<Pais> paisesC;
+    while(i < PaisesCantXDia.size()){
+        Pais p = PaisesCantXDia[i][0];
+        while(j < PaisesCantXDia[i].size()){
+            if(p < PaisesCantXDia[i][j]){
+                p = PaisesCantXDia[i][j];
+            }
+            j++;
+        }
+        paisesC.push_back(p);
+        i++;
+    }
+//BUSCO LA DISTANCIA QUE HAY ENTRE REPETIDOS Y TOMO LA PRIMERA
+    i = 1;
+    vector <int> distRep;
+    while(i < paisesC.size()){
+        Pais p = paisesC[0];
+        if(p == paisesC[i]){
+            distRep.push_back(i);
+        }
+        i++;
+    }
+
+
+//SI LA LISTA "DISTREP" NO TIENE ELEMENTOS DEVUELVE TRUE(NO HAY REPETIDOS)
+    if(distRep.size() <= 0 ){
+        return true;
+    }
+    else{
+//DEVUELVO UN BOOL QUE INDICA, SI LA LISTA ESTA ORDENADA SIEMPRE RESPETANDO LA DISTANCIA DE REPETICION Y QUE SEA CICLICA
+        int m = distRep[0] * i;
+        while(m < paisesC.size()-distRep[0]){
+            if(paisesC[i] != paisesC[i + distRep[0]] ){
+                return false;
+            }
+            i++;
+        }
+    }
     return true;
 }
 
