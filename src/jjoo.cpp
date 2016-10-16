@@ -112,9 +112,9 @@ vector<pair<Pais, vector<int> > > JJOO::medallero() const {
     vector<Atleta> atletasGanadores;
     while (i < _atletas.size()){
         while(j < comFinalizadas.size()){
-            if(comFinalizadas[j].ranking().size() > 0 && comFinalizadas[j].ranking()[0].ciaNumber() == _atletas[i].ciaNumber()
-               || comFinalizadas[j].ranking().size() > 1 && comFinalizadas[j].ranking()[1].ciaNumber() == _atletas[i].ciaNumber()
-               || comFinalizadas[j].ranking().size() > 2 && comFinalizadas[j].ranking()[2].ciaNumber() == _atletas[i].ciaNumber()  ) {
+            if((comFinalizadas[j].ranking().size() > 0 && comFinalizadas[j].ranking()[0].ciaNumber() == _atletas[i].ciaNumber())
+               || (comFinalizadas[j].ranking().size() > 1 && comFinalizadas[j].ranking()[1].ciaNumber() == _atletas[i].ciaNumber())
+               || (comFinalizadas[j].ranking().size() > 2 && comFinalizadas[j].ranking()[2].ciaNumber() == _atletas[i].ciaNumber())  ) {
                 atletasGanadores.push_back(this->_atletas[i]);
             }
             j++;
@@ -144,7 +144,7 @@ vector<pair<Pais, vector<int> > > JJOO::medallero() const {
     //ATLETASDEORO ATLETASDEPLATA & ATLETASDEBRONCE NO TIENEN REPETIDOS POR COMO ESTAN FILTRADOS
     //Y CONTEMPLAN EL CASO EN EL QUE UN JUGADOR GANA UNA SOLA MEDALLA Y "0" EN LAS OTRAS LISTAS
     //Variable de soporte
-    pair<Atleta,int > AtletaYMedalla;
+    pair<Atleta,int > AtletaYMedalla (this->_atletas[0], 0);
     //Vector de cantidad Oro
     vector<pair<Atleta, int >> atletasDeOro;
     i = 0;
@@ -299,9 +299,9 @@ vector<Atleta> JJOO::losMasFracasados(const Pais &p) const {
     vector<Atleta> atletasGanadores;
     while (i < _atletas.size()){
         while(j < comFinalizadas.size()){
-            if(comFinalizadas[j].ranking().size() > 0 && comFinalizadas[j].ranking()[0].ciaNumber() == _atletas[i].ciaNumber()
-               || comFinalizadas[j].ranking().size() > 1 && comFinalizadas[j].ranking()[1].ciaNumber() == _atletas[i].ciaNumber()
-               || comFinalizadas[j].ranking().size() > 2 && comFinalizadas[j].ranking()[2].ciaNumber() == _atletas[i].ciaNumber()  ) {
+            if((comFinalizadas[j].ranking().size() > 0 && comFinalizadas[j].ranking()[0].ciaNumber() == _atletas[i].ciaNumber())
+               || (comFinalizadas[j].ranking().size() > 1 && comFinalizadas[j].ranking()[1].ciaNumber() == _atletas[i].ciaNumber())
+               || (comFinalizadas[j].ranking().size() > 2 && comFinalizadas[j].ranking()[2].ciaNumber() == _atletas[i].ciaNumber())  ) {
                 atletasGanadores.push_back(this->_atletas[i]);
             }
             j++;
@@ -346,7 +346,7 @@ vector<Atleta> JJOO::losMasFracasados(const Pais &p) const {
 //TOMO UNA LISTA DE ATLETAS CON SU CANTIDAD DE APARICIONES
     i = 0;
     vector<pair<Atleta,int >> AtletasYCom;
-    pair<Atleta,int > atletaYCom;
+    pair<Atleta,int > atletaYCom (this->_atletas[0], 0);
     while(i < PyNuncaGanaron.size() ){
         j = 0;
         int cant = 0;
@@ -402,7 +402,7 @@ Atleta JJOO::stevenBradbury() const {
     }
 //ARMO UNA LISTA DE PARES DE ATLETAS GANADORES Y CAPACIDAD QUE TIENEN EN LA COMPETENCIA QUE GANARON
     i = 0;
-    pair<Atleta,int> ganadorYCapacidad;
+    pair<Atleta,int> ganadorYCapacidad (this->_atletas[0], 0);
     vector<pair<Atleta,int>> ganadoresYCapacidad;
     while(i < comFinalizadas.size()){
         if(comFinalizadas[i].ranking().size() > 0){

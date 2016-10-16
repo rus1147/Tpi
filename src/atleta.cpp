@@ -9,7 +9,6 @@ Atleta::Atleta(const string &n, const Genero &g, const int &a, const Pais &p, co
     this->_ciaNumber = c;
     pair<Deporte, int> deporteYCapacidadPorDefecto ("Tenis", 50);
     this->_deportes = vector<pair<Deporte, int>> (1, deporteYCapacidadPorDefecto);
-    this->_deportesAsignados = false;
 
 }
 
@@ -67,10 +66,6 @@ Deporte Atleta::especialidad() const {
 }
 
 void Atleta::entrenarNuevoDeporte(const Deporte &d, const int &c) {
-    if(this->_deportesAsignados == false){
-        this->_deportesAsignados = true;
-        this->_deportes = vector<pair<Deporte, int>> (0);
-    }
     pair<Deporte, int> deporteAux1 (d, c);
     pair<Deporte, int> deporteAux2 (d, c);
     int i = 0;
@@ -220,6 +215,5 @@ Atleta Atleta::operator=(const Atleta &a) {
     _nombre = a._nombre;
     _genero = a._genero;
     _deportes = a._deportes;
-    _deportesAsignados = a._deportesAsignados;
     return (*this);
 }
