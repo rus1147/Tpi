@@ -164,6 +164,5 @@ Atleta Atleta::operator=(const Atleta &a) {
     _nombre = a._nombre;
     _genero = a._genero;
     _deportes = a._deportes;
-    _deportesAsignados = a._deportesAsignados;
     return (*this);
 }
