@@ -110,7 +110,7 @@ void Atleta::guardar(std::ostream &os) const {
 void Atleta::cargar(std::istream &is) {
     is.ignore(2); // Ignoramos el "A "
     is >> _nombre;
-    is >>__STRING(_genero);
+    istream &operator>>(istream &is, Genero &g);
     is >>_anioNacimiento;
     is >>_nacionalidad;
     is >>_ciaNumber;
@@ -120,9 +120,12 @@ void Atleta::cargar(std::istream &is) {
     unsigned int i=0;
     while(i<deportes.size()){
         _deportes[i].first.push_back(i);
+        int j=0;
+       // while(j<deportes.size()){
+       //     _deportes[j].second.push_back(j);
+        }
     }
     //falta todavia y no se si esta bien porque no lo puedo correr y le faltan cosas
-}
 
 std::ostream &operator<<(std::ostream &os, const Atleta &a) {
     a.mostrar(os);

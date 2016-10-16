@@ -635,9 +635,9 @@ vector<Pais> JJOO::sequiaOlimpica() const {
         while(j < paisesXDia[i].size()){
             int k = 0;
             while(k < paisesXDia[k].size()){
-                if(==){
+                /*if(==){
 
-                }
+                }*/
 
             }
         }
