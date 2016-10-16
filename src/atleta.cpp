@@ -1,5 +1,5 @@
 #include "../include/atleta.h"
-
+#include "auxiliares.cpp"
 
 Atleta::Atleta(const string &n, const Genero &g, const int &a, const Pais &p, const int &c) {
     this->_nombre = n;
@@ -90,19 +90,52 @@ void Atleta::entrenarNuevoDeporte(const Deporte &d, const int &c) {
 }
 
 void Atleta::mostrar(std::ostream &os) const {
+    guardar(os);
 }
-
+// A |Liu Song| |Masculino| 1972 |China| 123 [(|Tenis de Mesa|, 90)]
 void Atleta::guardar(std::ostream &os) const {
-}
+    os << "{ A |" << _nombre << "|" << _genero << "|" << _anioNacimiento << "|" << _nacionalidad << "|" << _ciaNumber;
 
+    os << "[";
+    int i = 0;
+    while (i < _deportes.size()) {
+        os << "(" << "|" << _deportes[i].first << "|";
+        i++;
+
+        int j = 1;
+        while (j < _deportes.size()) {
+            os << "," << _deportes[j].second << ")";
+        }
+        if (i < _deportes.size() - 1) {
+            os << "],";
+        }
+    }
+}
+// A |Liu Song| |Masculino| 1972 |China| 123 [(|Tenis de Mesa|, 90)]
 void Atleta::cargar(std::istream &is) {
+    is.ignore(2); // Ignoramos el "A "
+    is >> _nombre;
+    is >>__STRING(_genero);
+    is >>_anioNacimiento;
+    is >>_nacionalidad;
+    is >>_ciaNumber;
+    string deportesstring;
+    getline(is,deportesstring);
+    vector<string> deportes= splitVector(deportesstring,',');
+    unsigned int i=0;
+    while(i<deportes.size()){
+        _deportes[i].first.push_back(i);
+    }
+    //falta todavia y no se si esta bien porque no lo puedo correr y le faltan cosas
 }
 
 std::ostream &operator<<(std::ostream &os, const Atleta &a) {
+    a.mostrar(os);
     return os;
 }
 
 std::istream &operator>>(std::istream &is, Atleta &a) {
+    a.cargar(is);
     return is;
 }
 
