@@ -13,6 +13,8 @@ private:
     vector<Atleta> _atletas;
     vector<vector<Competencia> > _cronograma;
     int _jornadaActual;
+    vector<Atleta> _atletasSinPosicion(const vector<Atleta> &vec, int &i) const;
+    vector<pair<Atleta, int>> _paresSinPosicion(const vector<pair<Atleta, int>> &vec, int &i) const;
     vector<pair<Atleta, int>> _atletasQueGanaronAlgo() const;
 
 
