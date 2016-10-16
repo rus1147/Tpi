@@ -647,7 +647,27 @@ vector<Pais> JJOO::sequiaOlimpica() const {
 void JJOO::transcurrirDia() {
     return;
 }
-
+/*J 2016 3
+[(A |Juan| |Masculino| 1920 |Argentina| 1 [(|Football|, 35), (|Rugby|, 10)]),
+(A |Jorge| |Masculino| 1930 |Argentina| 2 [(|Football|, 32), (|Rugby|, 20)]),
+(A |Juliana| |Femenino| 1932 |Bosnia| 3 [(|Handball|, 50)]),
+(A |Jenny| |Femenino| 1922 |USA| 4 [(|Softball|, 20)]),
+(A |Jordan| |Masculino| 1930 |USA| 5 [(|Basket|, 25), (|Football|, 40), (|Rugby|, 5)]),
+(A |Jackson| |Masculino| 1935 |Escocia| 6 [(|Basket|, 25), (|Football|, 40), (|Rugby|, 5)])]
+[[(C (|Rugby|, |Masculino|) |True|
+[(A |Juan| |Masculino| 1920 |Argentina| 1 [(|Football|, 35), (|Rugby|, 10)]),
+(A |Jorge| |Masculino| 1930 |Argentina| 2 [(|Football|, 32), (|Rugby|, 20)]),
+(A |Jackson| |Masculino| 1935 |Escocia| 6 [(|Basket|, 25), (|Football|, 40), (|Rugby|, 5)])]
+[2, 1, 6] [(2, |True|)]),
+(C (|Football|, |Masculino|) |True|
+[(A |Juan| |Masculino| 1920 |Argentina| 1 [(|Football|, 35), (|Rugby|, 10)]),
+(A |Jorge| |Masculino| 1930 |Argentina| 2 [(|Football|, 32), (|Rugby|, 20)])]
+[1, 2] [(1, |True|)])],
+[],
+[(C (|Handball|, |Femenino|) |False|
+[(A |Juliana| |Femenino| 1932 |Bosnia| 3 [(|Handball|, 50)])] [] []),
+(C (|Softball|, |Femenino|) |False| [] [] [])],
+[]]*/
 void JJOO::mostrar(std::ostream &os) const {
 }
 
@@ -658,10 +678,12 @@ void JJOO::cargar(std::istream &is) {
 }
 
 std::ostream &operator<<(std::ostream &os, const JJOO &j) {
+    j.mostrar(os);
     return os;
 }
 
 std::istream &operator>>(std::istream &is, JJOO &j) {
+    j.cargar(is);
     return is;
 }
 
