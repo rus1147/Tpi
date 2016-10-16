@@ -48,8 +48,8 @@ vector<Competencia> JJOO::competencias() const {
 vector<Competencia> JJOO::competenciasFinalizadasConOroEnPodio() const {
     vector<Competencia> ret;
     int j = 0;
-    int i = 0;
     while(j< this-> _cronograma.size()){
+        int i = 0;
         while(i< this-> _cronograma[j].size()){
             if(_cronograma[j][i].finalizada() && _cronograma[j][i].ranking().size() >0){
                 ret.push_back(this-> _cronograma[j][i]);
@@ -737,6 +737,41 @@ vector<Pais> JJOO::sequiaOlimpica() const {
 }
 
 void JJOO::transcurrirDia() {
+    int i = 0;
+    vector<Competencia> competenciasDeHoy = this->_cronograma[this->_jornadaActual - 1];
+    while(i < competenciasDeHoy.size()) {
+        if(!competenciasDeHoy[i].finalizada()) {
+            Deporte dep = competenciasDeHoy[i].categoria().first;
+            vector<Atleta> participantes = competenciasDeHoy[i].participantes();
+            int j = 0;
+            bool ordenado = false;
+            while (!ordenado) {
+                ordenado = true;
+                while (j < participantes.size() - 1) {
+                    if (participantes[j].capacidad(dep) < participantes[j + 1].capacidad(dep)) {
+                        swap(participantes[j], participantes[j + 1]);
+                        ordenado = false;
+                    }
+                    j++;
+                }
+            }
+            vector<int> ranking;
+            j = 0;
+            while (j < participantes.size()) {
+                ranking.push_back(participantes[j].ciaNumber());
+                j++;
+            }
+            vector<pair<int, bool>> control(0);
+            if (ranking.size() > 0) {
+                pair<int, bool> testeado(ranking[0], false);
+                control.push_back(testeado);
+            }
+            competenciasDeHoy[i].finalizar(ranking, control);
+        }
+        i++;
+    }
+    this->_cronograma[this->_jornadaActual - 1] = competenciasDeHoy;
+    this->_jornadaActual ++;
     return;
 }
 /*J 2016 3
