@@ -174,9 +174,9 @@ vector<Atleta> JJOO::losMasFracasados(const Pais &p) const {
                 if(this->competencias()[j].finalizada()){
                     int r = 0;
                     while(r < this->competencias()[j].ranking().size()){
-                        if(fracasados[i].first.ciaNumber() == this->competencias()[j].ranking()[r] && r < 3){
+                        if(fracasados[i].first.ciaNumber() == this->competencias()[j].ranking()[r].ciaNumber() && r < 3){
                             fracasados = this->_paresSinPosicion(fracasados, i);
-                        } else if (fracasados[i].first.ciaNumber() == this->competencias()[j].ranking()[r] && r >= 3){
+                        } else if (fracasados[i].first.ciaNumber() == this->competencias()[j].ranking()[r].ciaNumber() && r >= 3){
                             fracasados[i].second++;
                         }
                         r++;
