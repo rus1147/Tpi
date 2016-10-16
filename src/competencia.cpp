@@ -1,5 +1,6 @@
 #include "../include/competencia.h"
 #include "../tests/auxiliares_tests.h"
+#include "../src/auxiliares.cpp"
 
 
 Competencia::Competencia(const Deporte &d, const Genero &g, const vector<Atleta> &as) {
@@ -137,19 +138,48 @@ void Competencia::sancionarTramposos() {
 }
 
 void Competencia::mostrar(std::ostream &os) const {
+    guardar(os);
 }
-
+/*C (|Rugby|, |Masculino|) |True|
+  [(A |Juan| |Masculino| 1920 |Argentina| 1 [(|Football|, 35), (|Rugby|, 10)]),
+  (A |Jorge| |Masculino| 1930 |Argentina| 2 [(|Football|, 32), (|Rugby|, 20)]),
+  (A |Jackson| |Masculino| 1935 |Escocia| 6 [(|Basket|, 25), (|Football|, 40), (|Rugby|, 5)])]
+  [1, 6] [(1, |True|), (6, |True|)]
+   En el caso de que la competencia no est ́e finalizada, las listas de ranking y antidoping deben ser vac ́ıas. Por ejemplo:
+C (|Rugby|, |Masculino|) |False|
+[(A |Juan| |Masculino| 1920 |Argentina| 1 [(|Football|, 35), (|Rugby|, 10)]),
+(A |Jorge| |Masculino| 1930 |Argentina| 2 [(|Football|, 32), (|Rugby|, 20)]),
+(A |Jackson| |Masculino| 1935 |Escocia| 6 [(|Basket|, 25), (|Football|, 40), (|Rugby|, 5)])]
+[] []*/
 void Competencia::guardar(std::ostream &os) const {
+  /*  os << "{ A |" << << "|" << _genero << "|" << _anioNacimiento << "|" << _nacionalidad << "|" << _ciaNumber;
+
+    os << "[";
+    int i = 0;
+    while (i < _deportes.size()) {
+        os << "(" << "|" << _deportes[i].first << "|";
+        i++;
+
+        int j = 1;
+        while (j < _deportes.size()) {
+            os << "," << _deportes[j].second << ")";
+        }
+        if (i < _deportes.size() - 1) {
+            os << "],";
+        }
+    }*/
 }
 
 void Competencia::cargar(std::istream &is) {
 }
 
 std::ostream &operator<<(std::ostream &os, const Competencia &c) {
+    c.mostrar(os);
     return os;
 }
 
 std::istream &operator>>(std::istream &is, Competencia &c) {
+    c.cargar(is);
     return is;
 }
 

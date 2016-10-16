@@ -1,5 +1,5 @@
 #include "../include/atleta.h"
-#include "auxiliares.cpp"
+#include "../src/auxiliares.cpp"
 
 Atleta::Atleta(const string &n, const Genero &g, const int &a, const Pais &p, const int &c) {
     this->_nombre = n;
