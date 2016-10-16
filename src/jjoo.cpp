@@ -52,7 +52,7 @@ vector<Competencia> JJOO::competenciasFinalizadasConOroEnPodio() const {
         int i = 0;
         while(i< this-> _cronograma[j].size()){
             if(_cronograma[j][i].finalizada() && _cronograma[j][i].ranking().size() >0){
-                ret.push_back(this-> _cronograma[j][i]);
+                ret.push_back(this->_cronograma[j][i]);
             }
             i++;
         }
@@ -108,7 +108,7 @@ vector<pair<Pais, vector<int> > > JJOO::medallero() const {
             j++;
         }
         if(!paisRepetido){
-            medallero.push_back(pair (atletasConMedallas[i].first.nacionalidad(), {0, 0, 0}));
+            medallero.push_back(pair<Pais, vector<int>> (atletasConMedallas[i].first.nacionalidad(), {0, 0, 0}));
         }
         i++;
     }
@@ -120,6 +120,7 @@ vector<pair<Pais, vector<int> > > JJOO::medallero() const {
             if(atletasConMedallas[j].first.nacionalidad() == medallero[i].first){
                 medallero[i].second[atletasConMedallas[j].second]++;
             }
+            j++;
         }
     }
     //medallero = vector<pair<paisesNoRepetidosQueGanaronMedallas, vector<Oro,Plata,Bronce>>>
@@ -635,7 +636,7 @@ vector<Pais> JJOO::sequiaOlimpica() const {
 
 void JJOO::transcurrirDia() {
     int i = 0;
-    vector<Competencia> competenciasDeHoy = this->_cronograma[this->_jornadaActual - 1];
+    vector<Competencia> competenciasDeHoy = this->cronograma(this->_jornadaActual);
     while(i < competenciasDeHoy.size()) {
         if(!competenciasDeHoy[i].finalizada()) {
             Deporte dep = competenciasDeHoy[i].categoria().first;
@@ -729,14 +730,14 @@ vector<pair<Atleta, int>> JJOO::_atletasQueGanaronAlgo() const {
     vector<pair<Atleta, int>> atletasConMedallas;
     int i = 0;
     while(i < this->competencias().size()){
-        if(this->competencias()[i].ranking() > 0){
-            atletasConMedallas.push_back(pair(this->competencias()[i].ranking()[0], 0));
+        if(this->competencias()[i].ranking().size() > 0){
+            atletasConMedallas.push_back(pair<Atleta, int> (this->competencias()[i].ranking()[0], 0));
         }
-        if(this->competencias()[i].ranking() > 1){
-            atletasConMedallas.push_back(pair(this->competencias()[i].ranking()[1], 1));
+        if(this->competencias()[i].ranking().size() > 1){
+            atletasConMedallas.push_back(pair<Atleta, int> (this->competencias()[i].ranking()[1], 1));
         }
-        if(this->competencias()[i].ranking() > 2){
-            atletasConMedallas.push_back(pair(this->competencias()[i].ranking()[2], 2));
+        if(this->competencias()[i].ranking().size() > 2){
+            atletasConMedallas.push_back(pair<Atleta, int> (this->competencias()[i].ranking()[2], 2));
         }
         i++;
     }
