@@ -167,7 +167,6 @@ TEST(jjoo_tests, competencias_al_transcurrir_dos_dias) {
                                               {2, true}}); //Como los atletas 0 y 2 tienen dopping positivo, el ganador de la medalla de oro es el atleta 1 con capacidad 0 -> steven!
     comp_dos_primer_dia.finalizar({3, 1, 0}, {{0, false}});
 
-
     jo._cronograma[0][0].finalizar({0, 2, 1}, {{0, true},
                                                {2, true}});
     jo._cronograma[0][1].finalizar({3, 1, 0}, {{0, false}});
