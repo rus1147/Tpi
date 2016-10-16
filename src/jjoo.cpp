@@ -552,8 +552,10 @@ bool JJOO::uyOrdenadoAsiHayUnPatron() const {
     }
     else{
 //DEVUELVO UN BOOL QUE INDICA, SI LA LISTA ESTA ORDENADA SIEMPRE RESPETANDO LA DISTANCIA DE REPETICION Y QUE SEA CICLICA
-        int m = distRep[0] * i;
+        i = 0;
+        int m = 0;
         while(m < paisesC.size()-distRep[0]){
+            m = distRep[0] * (i+1);
             if(paisesC[i] != paisesC[i + distRep[0]] ){
                 return false;
             }
@@ -629,19 +631,109 @@ vector<Pais> JJOO::sequiaOlimpica() const {
         paisesXDia.push_back(paisesDelDia);
         i++;
     }
+//armo una lista de todos los paises que ganaron(ConRepetidos)
     i = 0;
+    j = 0;
+    vector<Pais> todosLosPCOnRep;
     while(i < paisesXDia.size()){
-        j = 0;
-        while(j < paisesXDia[i].size()){
-            int k = 0;
-            while(k < paisesXDia[k].size()){
-                /*if(==){
-
-                }*/
-
-            }
+        while(j < paisesXDia.size()){
+            todosLosPCOnRep.push_back(paisesXDia[i][j]);
+            j++;
         }
+        i++;
     }
+//armo una lista con todos los paises que ganaron(SinRepetidos), asi despues filtrar es mas facil(de ver)
+    i = 0;
+    vector<Pais> todosLosP;
+    while(i < todosLosPCOnRep.size()){
+        j = 0;
+        int r = 0;
+        while(j < todosLosP.size()){
+            if(todosLosPCOnRep[i] == todosLosP[j]){
+                r++;
+            }
+            j++;
+        }
+        if(r == 0){
+            todosLosP.push_back(todosLosPCOnRep[i]);
+        }
+        i++;
+    }
+//armo una lista de los paises con sus apariciones
+    i = 0;
+    vector<int> apariciones;
+    pair<Pais,vector<int>> PYsusApariciones;
+    vector< pair<Pais, vector<int>> > paisesYSusApariciones;
+    while(i < todosLosP.size()){
+        j = 0;
+        while(j < paisesXDia.size()){
+            int r = 0;
+            apariciones.clear();
+            while(r < paisesXDia[j].size()){
+                if(todosLosP[i] == paisesXDia[i][j]){
+                    apariciones.push_back(i);
+                }
+                r++;
+            }
+            j++;
+        }
+        PYsusApariciones.first = todosLosP[i];
+        PYsusApariciones.second = apariciones;
+        paisesYSusApariciones.push_back(PYsusApariciones);
+        i++;
+    }
+//saco las distancias (entre apariciones )y tomo las primeras apariciones
+    i = 0;
+    pair<Pais,vector<int>> pConDiferencias;
+    vector<pair<Pais,vector<int>>> paisesConDiferencias;
+    vector<int > diferencias;
+    while(i < paisesYSusApariciones.size()){
+        j = 0;
+        diferencias.clear();
+        diferencias.push_back(paisesYSusApariciones[i].second[0]);
+        while(j< paisesYSusApariciones[i].second.size()-1){
+            int r = paisesYSusApariciones[i].second[j+1]-paisesYSusApariciones[i].second[j];
+            diferencias.push_back(r);
+            j++;
+        }
+        pConDiferencias.first = paisesYSusApariciones[i].first;
+        pConDiferencias.second = diferencias;
+        paisesConDiferencias.push_back(pConDiferencias);
+        i++;
+    }
+//busco el maximo de las diferencias
+    i = 0;
+    int max = 0;
+    while(i < paisesConDiferencias.size()){
+        int r = paisesConDiferencias[i].second[0];
+        while(j < paisesConDiferencias[i].second.size()){
+            if(r < paisesConDiferencias[i].second[j]){
+                r = paisesConDiferencias[i].second[j];
+            }
+            j++;
+        }
+        if(max < r){
+            max = r;
+        }
+        i++;
+    }
+//filtro con max(el mayor tiempo que paso algun pais esperando ganar)
+    i = 0;
+    vector<Pais> paisesSequia;
+    while(i < paisesConDiferencias.size()){
+        int r = 0;
+        while(j < paisesConDiferencias[i].second.size()){
+            if(paisesConDiferencias[i].second[j] == max){
+                r++;
+            }
+            j++;
+        }
+        if(r > 0){
+            paisesSequia.push_back(paisesConDiferencias[i].first);
+        }
+        i++;
+    }
+    return paisesSequia;
 }
 
 void JJOO::transcurrirDia() {
