@@ -13,6 +13,7 @@ private:
     vector<Atleta> _atletas;
     vector<vector<Competencia> > _cronograma;
     int _jornadaActual;
+    vector<pair<Atleta, int>> _atletasQueGanaronAlgo() const;
 
 
 
