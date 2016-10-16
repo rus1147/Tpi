@@ -1,6 +1,5 @@
 #include <fstream>
 #include <algorithm>
-//#include <atleta.h>
 #include "gtest/gtest.h"
 #include "auxiliares_tests.h"
 
@@ -43,4 +42,4 @@ in.close();
 EXPECT_EQ(d2, d1);
 }
 
- * /
+ */
