@@ -61,7 +61,8 @@ vector<Competencia> JJOO::competenciasFinalizadasConOroEnPodio() const {
     return ret;
 }
 
-vector<Atleta> JJOO::dePaseo() const {    vector<Atleta> ret;
+vector<Atleta> JJOO::dePaseo() const {
+    vector<Atleta> ret;
     ret = _atletas;
     vector<Competencia> com;
     int i = 0;
@@ -108,7 +109,7 @@ vector<pair<Pais, vector<int> > > JJOO::medallero() const {
             j++;
         }
         if(!paisRepetido){
-            medallero.push_back(pair<Pais, vector<int>> (atletasConMedallas[i].first.nacionalidad(), {0, 0, 0}));
+            medallero.push_back(pair<Pais, vector<int>> (atletasConMedallas[i].first.nacionalidad(), vector<int> (3, 0)));
         }
         i++;
     }
@@ -122,6 +123,7 @@ vector<pair<Pais, vector<int> > > JJOO::medallero() const {
             }
             j++;
         }
+        i++;
     }
     //medallero = vector<pair<paisesNoRepetidosQueGanaronMedallas, vector<Oro,Plata,Bronce>>>
     bool ordenada = false;
@@ -636,7 +638,7 @@ vector<Pais> JJOO::sequiaOlimpica() const {
 
 void JJOO::transcurrirDia() {
     int i = 0;
-    vector<Competencia> competenciasDeHoy = this->cronograma(this->_jornadaActual);
+    vector<Competencia> competenciasDeHoy = this->cronograma(this->jornadaActual());
     while(i < competenciasDeHoy.size()) {
         if(!competenciasDeHoy[i].finalizada()) {
             Deporte dep = competenciasDeHoy[i].categoria().first;
@@ -668,8 +670,8 @@ void JJOO::transcurrirDia() {
         }
         i++;
     }
-    this->_cronograma[this->_jornadaActual - 1] = competenciasDeHoy;
-    this->_jornadaActual ++;
+    _cronograma[_jornadaActual - 1] = competenciasDeHoy;
+    _jornadaActual++;
     return;
 }
 /*J 2016 3
