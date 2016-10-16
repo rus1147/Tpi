@@ -174,9 +174,9 @@ vector<Atleta> JJOO::losMasFracasados(const Pais &p) const {
                 if(this->competencias()[j].finalizada()){
                     int r = 0;
                     while(r < this->competencias()[j].ranking().size()){
-                        if(fracasados[i].first.ciaNumber() == this->competencias()[j].ranking()[r] && r < 3){
+                        if(fracasados[i].first.ciaNumber() == this->competencias()[j].ranking()[r].ciaNumber() && r < 3){
                             fracasados = this->_paresSinPosicion(fracasados, i);
-                        } else if (fracasados[i].first.ciaNumber() == this->competencias()[j].ranking()[r] && r >= 3){
+                        } else if (fracasados[i].first.ciaNumber() == this->competencias()[j].ranking()[r].ciaNumber() && r >= 3){
                             fracasados[i].second++;
                         }
                         r++;
@@ -214,7 +214,70 @@ vector<Atleta> JJOO::losMasFracasados(const Pais &p) const {
 }
 
 void JJOO::liuSong(const Atleta &a, const Pais &p) {
+    Atleta atletaNacionalizado(a.nombre(), a.genero(), a.anioNacimiento(), p, a.ciaNumber());
+    int i = 0;
+    while(i < a.deportes().size()){
+        atletaNacionalizado.entrenarNuevoDeporte(a.deportes()[i], a.capacidad(a.deportes()[i]));
+        i++;
+    }
 
+    i = 0;
+    while(i < this->_atletas.size()){
+        if(this->_atletas[i].ciaNumber() == a.ciaNumber()){
+            this->_atletas = this->_atletasSinPosicion(this->_atletas, i);
+            this->_atletas.push_back(atletaNacionalizado);
+        }
+    }
+
+    vector<vector<Competencia>> nuevoCronograma;
+    i = 0;
+    while (i < this->_cronograma.size()){
+        vector<Competencia> nuevasCompetencias;
+        int j = 0;
+        while(j < this->_cronograma[i].size()){
+            Competencia comp = this->_cronograma[i][j];
+            vector<Atleta> participantes = comp.participantes();
+            int k = 0;
+            bool hayQueModificar = false;
+            while(k < participantes.size()){
+                if(participantes[k].ciaNumber() == a.ciaNumber()){
+                    participantes = _atletasSinPosicion(participantes, k);
+                    hayQueModificar = true;
+                }
+                k++;
+            }
+            if(hayQueModificar){
+                participantes.push_back(atletaNacionalizado);
+                Categoria categoria = comp.categoria();
+                Competencia nuevaComp(categoria.first, categoria.second, participantes);
+                if(comp.finalizada()){
+                    k = 0;
+                    vector<int> ranking;
+                    vector<pair<int,bool>> control;
+                    while(k < comp.ranking().size()){
+                        ranking.push_back(comp.ranking()[k].ciaNumber());
+                        k++;
+                    }
+                    k = 0;
+                    while(k < comp.lesTocoControlAntiDoping().size()){
+                        bool leToco = comp.leDioPositivo(comp.lesTocoControlAntiDoping()[k]);
+                        int ciaNumber = comp.lesTocoControlAntiDoping()[k].ciaNumber();
+                        pair<int,bool> entry (ciaNumber, leToco);
+                        control.push_back(entry);
+                        k++;
+                    }
+                    nuevaComp.finalizar(ranking, control);
+                }
+                nuevasCompetencias.push_back(nuevaComp);
+            } else {
+                nuevasCompetencias.push_back(comp);
+            }
+            j++;
+        }
+        i++;
+        nuevoCronograma.push_back(nuevasCompetencias);
+    }
+    this->_cronograma = nuevoCronograma;
     return;
 }
 
@@ -674,7 +737,7 @@ vector<Atleta> JJOO::_atletasSinPosicion(const vector<Atleta> &vec, int &i) cons
 
 vector<pair<Atleta, int>> JJOO::_paresSinPosicion(const vector<pair<Atleta, int>> &vec, int &i) const{
     pair<Atleta, int> par (Atleta("Jorge",Genero::Masculino,1990,"Argentina",1), 0);
-    std::vector<Atleta> newVec (vec.size() - 1, par);
+    std::vector<pair<Atleta, int>> newVec (vec.size() - 1, par);
     int j=0;
     while (j < vec.size() - 1){
         if(j < i){
