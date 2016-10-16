@@ -1,9 +1,8 @@
 #include<iostream>
 #include<sstream>
+#include "../include/auxiliares.h"
 
-#include "auxiliares.h"
-
-using namespace std;
+/*using namespace std;
 
 template <class T>
 inline void mostrarSecuencia(std::ostream & os, const Secuencia<T> & s)
@@ -54,7 +53,7 @@ inline void ordenar(Secuencia<T> & vs)
     }
   }
 }
-
+*/
 inline string trim(string& str)
 {
   size_t first = str.find_first_not_of(' ');

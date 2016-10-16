@@ -6,7 +6,7 @@
 
 
 int main() {
-    ifstream entrada("entrada.txt");
+    /*ifstream entrada("entrada.txt");
     ofstream salida("salida.txt");
     int cant,i=0;
     entrada>>cant;
@@ -32,6 +32,6 @@ int main() {
         i++;
     }
     entrada.close();
-    salida.close();
+    salida.close(); */
       return 0;
 }
