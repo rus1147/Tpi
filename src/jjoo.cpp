@@ -209,6 +209,7 @@ vector<Atleta> JJOO::losMasFracasados(const Pais &p) const {
         } else if (fracasados[i].second < scoreDeFracaso){
             return losMasFracasados;
         }
+        i++;
     }
     return losMasFracasados;
 }
@@ -227,6 +228,7 @@ void JJOO::liuSong(const Atleta &a, const Pais &p) {
             this->_atletas = this->_atletasSinPosicion(this->_atletas, i);
             this->_atletas.push_back(atletaNacionalizado);
         }
+        i++;
     }
 
     vector<vector<Competencia>> nuevoCronograma;
@@ -327,6 +329,7 @@ Atleta JJOO::stevenBradbury() const {
 }
 
 bool JJOO::uyOrdenadoAsiHayUnPatron() const {
+
 // BUSCO LAS COMPETENCIAS FINALIZADAS PORR DIA
     int j = 0;
     vector<Competencia> compDelDia;
@@ -418,14 +421,16 @@ bool JJOO::uyOrdenadoAsiHayUnPatron() const {
     i = 0;
     vector<Pais> paisesC;
     while(i < PaisesCantXDia.size()){
-        Pais p = PaisesCantXDia[i][0];
-        while(j < PaisesCantXDia[i].size()){
-            if(p < PaisesCantXDia[i][j]){
-                p = PaisesCantXDia[i][j];
+        if(PaisesCantXDia[i].size() > 0){
+            Pais p = PaisesCantXDia[i][0];
+            while(j < PaisesCantXDia[i].size()){
+                if(p < PaisesCantXDia[i][j]){
+                    p = PaisesCantXDia[i][j];
+                }
+                j++;
             }
-            j++;
+            paisesC.push_back(p);
         }
-        paisesC.push_back(p);
         i++;
     }
 //BUSCO LA DISTANCIA QUE HAY ENTRE REPETIDOS Y TOMO LA PRIMERA
