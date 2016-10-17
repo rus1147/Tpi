@@ -73,11 +73,12 @@ C(cota):0
 
  falta el cuerpo del ciclio preserva el invariante y que la Fv(Funcion Variante es decreciente)
 C1 : vale B1 & I: 0 <= i <= competencias.size() & (forall J in[0..(i-1)]) r.anioNacimiento() <= competencias[j].ranking[0].anioNacimiento()
-
+(B1 & 0<= i <= competencias.size()) => (0 <= i < competencias.size())
 
 C2: vale Qif & i == i@C1
-
+(r.anioNacimiento() > competencias[i].ranking()[0].anioNacimiento() & r == competencias[i].ranking()[0]) || (r.anioNacimiento() <= competencias[i].ranking()[0].anioNacimiento() & r == r@C1)
 
 C3: vale i == i@C2+1
+
 
  */
