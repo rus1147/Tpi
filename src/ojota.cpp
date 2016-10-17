@@ -31,9 +31,10 @@ Atleta atletaProdigio(JJOO const &j){
             r = competencias[i].ranking()[0];
             //Eif2: vale r == competencias[i].ranking()[0]
         }
-        //Qif: (r.anioNacimiento() > competencias[i].ranking()[0].anioNacimiento() & r == competencias[i].ranking()[0])
-        // || (r.anioNacimiento() <= competencias[i].ranking()[0].anioNacimiento() & r == r@C1)
-    //C2: vale Qif & i == i@C1
+        //Qif: ((r.anioNacimiento() > competencias[i].ranking()[0].anioNacimiento() & r == competencias[i].ranking()[0])
+        // || (r.anioNacimiento() <= competencias[i].ranking()[0].anioNacimiento() & r == r@C1)) & i == i@C1 &
+        // (forall J in [0..(i)]) r.anioNacimiento() <= competencias[i].ranking()[0].anioNacimiento()
+        //C2: vale Qif
         i++;
     //C3: vale i == i@C2+1
     }
@@ -44,41 +45,55 @@ Atleta atletaProdigio(JJOO const &j){
 }
 
 /*
-
+EL ULTIMO ESTADO ANTES DE ENTRAR AL CICLO IMPLICA "Pc":
 E4 => Pc: r == competencia[0].ranking()[0] & i== 0 & competencias == j.competenciasFinalizadasConOroEnPodio()
 (r == competencia[0].ranking()[0]) => r == (competencia[0].ranking()[0])
 (competencia == competencia@E3 & i == i@E3) => (i== 0 & competencias == j.competenciasFinalizadasConOroEnPodio())
 
 
-
+"Pc" IMPLICA EL "Invariante":
 Pc => I: 0 <= i <= competencias.size() & (forall J in[0..(i-1)]) r.anioNacimiento() <= competencias[j].ranking[0].anioNacimiento()
 (i == 0) => (0 <= i <= competencias.size())
 (i ==0 & r == competencia[0].ranking()[0] & i== 0 & competencias == j.competenciasFinalizadasConOroEnPodio())
  => (forall J in[0..(0-1)]) r.anioNacimiento() <= competencias[0].ranking[0].anioNacimiento())
 
-
+EL "Invariante" Y "¬B" IMPLICAN LA SALIDA DEL CICLO
 Fv(Funcion Variante):competencias.size()-i
 C(cota):0
 (I & Fv <= C) => ¬B
 (FV <= C) <=> competencias.size()-i <= 0 <=> competencias.size() <= i (que es exactamente ¬B)
 
 
+LA "¬B" Y "Invariante" IMPLICAN "Qc"
+(¬B & I) => Qc: i==competencias.size() &
+ (forall J in [0..competencias.size()-1]) r.anioNacimiento() <= competencia[i].ranking[0].anioNacimiento()
 
-(¬B & I) => Qc: i==competencias.size() & (forall J in [0..competencias.size()-1]) r.anioNacimiento() <= competencia[i].ranking[0].anioNacimiento()
  1_(¬B & 0<=i<=competencias.size()) => i==competencias.size()
  2_(i==competencias.size() & (forall J in[0..(i-1)]) r.anioNacimiento() <= competencias[j].ranking[0].anioNacimiento())
  => (forall J in [0..competencias.size()-1]) r.anioNacimiento() <= competencia[j].ranking[0].anioNacimiento())
 
 
+EL CUERPO DEL CICLO PRESERVA EL "Invariante" & LA "Funcion Variante" DECRECE:
 
- falta el cuerpo del ciclio preserva el invariante y que la Fv(Funcion Variante es decreciente)
-C1 : vale B1 & I: 0 <= i <= competencias.size() & (forall J in[0..(i-1)]) r.anioNacimiento() <= competencias[j].ranking[0].anioNacimiento()
+C1 : vale B1 & I: 0 <= i <= competencias.size() &
+(forall J in[0..(i-1)]) r.anioNacimiento() <= competencias[j].ranking[0].anioNacimiento()
+
 (B1 & 0<= i <= competencias.size()) => (0 <= i < competencias.size())
 
-C2: vale Qif & i == i@C1
-(r.anioNacimiento() > competencias[i].ranking()[0].anioNacimiento() & r == competencias[i].ranking()[0]) || (r.anioNacimiento() <= competencias[i].ranking()[0].anioNacimiento() & r == r@C1)
-
-C3: vale i == i@C2+1
+C2: vale Qif
 
 
- */
+
+C3: vale i@C3 == i@C2+1 r.anioNacimiento() <= competencias[i@C2].ranking()[0].anioNacimiento() &
+(forall J in [0..i@C2]) r.anioNacimiento() <= competencias[j].ranking[0].anioNacimiento()
+
+Implica i@C3-1 == i@C2 &
+(forall J in [0..(i@C3-1)]) r.anioNacimiento() <= competencias[j].ranking[0].anioNacimiento()
+
+(0<=i@C2< comptencias.size()) => (0<=i@C2+1<=competencias.size())
+(0<=i@C2+1<=competencias.size()) => (0<=i@C3<=competencias.size())
+
+
+
+
+*/
