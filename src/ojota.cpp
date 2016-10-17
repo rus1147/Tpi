@@ -17,31 +17,46 @@ Atleta atletaProdigio(JJOO const &j){
     int i = 0;
 //E3: vale i ==0 & competencias == competencias@E2
 //Implica: i== 0 & competencias == j.competenciasFinalizadasConOroEnPodio()
+
     Atleta r = competencias[0].ranking()[0];
 //E4: vale r == competencia[0].ranking()[0] & i == i @E3 competencia == competencia@E3
-//Pc: r == competencia[0].ranking()[0] & i== 0 & competencias == j.competenciasFinalizadasConOroEnPodio()
+//Pc: r == competencia[0].ranking()[0] & i== 0 &
+// competencias == j.competenciasFinalizadasConOroEnPodio() & esCampeon(r,j)
+
     while(i < competencias.size()){
-    //C1 : vale B1 & I: 0 <= i <= competencias.size() &
+    //C1 : vale B1 & I: 0 <= i <= competencias.size() & esCampeon(r,j)
     //(forall J in[0..(i-1)]) r.anioNacimiento() <= competencias[j].ranking[0].anioNacimiento()
 
         //Pif: vale 0<= i< competencias.size() &
         // (forall J in[0..(i-1)]) r.anioNacimiento() <= competencias[i].ranking[0].anioNacimiento()
+
         if(r.anioNacimiento() > competencias[i].ranking()[0].anioNacimiento()){
             //Eif1: vale B
+
             r = competencias[i].ranking()[0];
             //Eif2: vale r == competencias[i].ranking()[0]
+
         }
         //Qif: ((r.anioNacimiento() > competencias[i].ranking()[0].anioNacimiento() & r == competencias[i].ranking()[0])
         // || (r.anioNacimiento() <= competencias[i].ranking()[0].anioNacimiento() & r == r@C1)) & i == i@C1 &
-        // (forall J in [0..(i)]) r.anioNacimiento() <= competencias[i].ranking()[0].anioNacimiento()
+        // (forall J in [0..(i)]) r.anioNacimiento() <= competencias[i].ranking()[0].anioNacimiento() & esCampeon(r,j)
         //C2: vale Qif
+
         i++;
     //C3: vale i == i@C2+1
+
     }
-    //Qc: i == competencias.size() &
+    //Qc: i == competencias.size() & esCampeon(r,j) &
     //(forall J in [0..(competencias.size()-1)]) r.anioNacimiento() <= competencias[j].ranking[0].anioNacimiento()
 
+//E5: vale Qc
+
     return r;
+//E6: vale res == r@E5 & i@E5==competencias.size() & esCampeon(r@5,j)
+// (forall J in [0..i@5-1]) r.anioNacimiento() <= competencias[j].ranking()[0].anioNacimiento()
+
+//Implica: (forall J in [0..competencia.size()-1]) res.anioNacimiento() <= competencia[j].ranking()[0].anioNacimiento()
+// & esCampeon(res,j)
 }
 
 /*
