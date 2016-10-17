@@ -88,13 +88,13 @@ void Atleta::mostrar(std::ostream &os) const {
 }
 // A |Liu Song| |Masculino| 1972 |China| 123 [(|Tenis de Mesa|, 90)]
 void Atleta::guardar(std::ostream &os) const {
-    os << "{ A |" << _nombre << "|" << _genero << "|" 
+    os << "A |" << _nombre << "|" << _genero << "|"
        << _anioNacimiento << "|" << _nacionalidad << "|" << _ciaNumber;
     os << "[";
-    int i = 0;
+    unsigned int i = 0;
     while (i < _deportes.size()) {
-        os << "(" << "|" << _deportes[i].first << "|";
-        os << "," << _deportes[i].second << ")";
+        os << "(" << "|" << _deportes[i].first << "|"
+        << "," << _deportes[i].second << ")";
         i++;
         }
         if (i < _deportes.size()) {

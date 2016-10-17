@@ -1,4 +1,5 @@
 #include "../include/jjoo.h"
+#include "../tests/auxiliares_tests.h"
 
 #include <utility>
 #include <algorithm>
@@ -518,16 +519,76 @@ void JJOO::transcurrirDia() {
 (C (|Softball|, |Femenino|) |False| [] [] [])],
 []]*/
 void JJOO::mostrar(std::ostream &os) const {
+    guardar(os);
 }
 
 void JJOO::guardar(std::ostream &os) const {
+    os<<"J "<<_anio<<" "<<_jornadaActual<<"[";
+    unsigned int i = 0;
+    while(i < _atletas.size()){
+        os<<"("<<_atletas[i]<<")";
+        i++;
+        if(i < _atletas.size()){
+            os<<", ";
+        }
+    }
+    os<<"]";
+    unsigned int j;
+    i = 0;
+    os<<"[";
+    while(i < _cronograma.size()){
+        j = 0;
+        os<<"[";
+        while(j < _cronograma[i].size()){
+            os<<"("<<_cronograma[i][j]<<")";
+            j++;
+            if(j < _cronograma[i].size()){
+                os<<", ";
+            }
+        }
+        os<<"]";
+        i++;
+        if(i < _cronograma.size()){
+            os<<", ";
+        }
+    }
+    os<<"]";
 }
 
 void JJOO::cargar(std::istream &is) {
+    string at;
+    is>>at>>_anio>>_jornadaActual;
+    _atletas.clear();
+    getline(is,at,'[');
+    while(is.peek()!=']'){
+        Atleta a("a",Genero::Masculino,1,"a",2); //Atleta con basura
+        getline(is,at,'(');
+        a.cargar(is);
+        getline(is,at,')');
+        _atletas.push_back(a);
+    }
+    _cronograma.clear();
+    getline(is,at,'[');
+    while(is.peek()!=']'){
+        vector<Competencia> vc;
+        getline(is,at,'[');
+        while(is.peek()!=']'){
+            Competencia c = Competencia(deportes[5], Genero::Femenino, std::vector<Atleta>());//competencia con basura
+            getline(is,at,'(');
+            c.cargar(is);
+            getline(is,at,')');
+            vc.push_back(c);
+        }
+        is.get();
+        _cronograma.push_back(vc);
+        if(is.peek()!=']'){
+            vc.clear();
+        }
+    }
 }
 
 std::ostream &operator<<(std::ostream &os, const JJOO &j) {
-    j.mostrar(os);
+    j.guardar(os);
     return os;
 }
 
