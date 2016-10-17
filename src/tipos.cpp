@@ -21,3 +21,16 @@ istream &operator>>(istream &is, Genero &g) {
     }
     return is;
 }
+Genero generostring(const string &s){
+    Genero g;
+
+    if (s == "Femenino") {
+        g = Femenino;
+    } else if (s == "Masculino") {
+        g = Masculino;
+    } else {
+        assert(false);
+    }
+
+    return g;
+}
