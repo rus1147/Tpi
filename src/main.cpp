@@ -3,6 +3,6 @@
 #include "../include/competencia.h"
 #include "../include/jjoo.h"
 
-main(){
+int main(){
     return 0;
 }
