@@ -1,6 +1,6 @@
 #include "../include/competencia.h"
 #include "../tests/auxiliares_tests.h"
-#include "../src/auxiliares.cpp"
+
 
 
 Competencia::Competencia(const Deporte &d, const Genero &g, const vector<Atleta> &as) {

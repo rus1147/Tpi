@@ -1,6 +1,1 @@
-#ifndef AUX_H
-#define AUX_H
-
-#include "tipos.h"
-
-#endif
+//si lo borro se rompe todo
