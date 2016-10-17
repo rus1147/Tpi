@@ -460,174 +460,44 @@ bool JJOO::uyOrdenadoAsiHayUnPatron() const {
 }
 
 vector<Pais> JJOO::sequiaOlimpica() const {
-    // BUSCO LAS COMPETENCIAS FINALIZADAS PORR DIA
-    int j = 0;
-    vector<Competencia> compDelDia;
-    vector< vector<Competencia> >compXDia;
-    while(j< this-> _jornadaActual){
-        compDelDia.clear();
-        int i = 0;
-        while(i< this-> _cronograma[j].size()){
-            if(_cronograma[j][i].finalizada()){
-                compDelDia.push_back(this-> _cronograma[j][i]);
-            }
-            i++;
-        }
-        compXDia.push_back(compDelDia);
-        j++;
-    }
-// PAISES GANADORES CON REPETIDOS
+    vector<Pais> paises = this->_paises();
+    vector<pair<Pais, int>> diasSinGanarPorPais;
+
     int i = 0;
-    vector<Pais> paisesganadorRep;
-    vector<vector<Pais>> paisesXDiaRep;
-    while(i < compXDia.size()){
-        j = 0;
-        paisesganadorRep.clear();
-        while(j < compXDia[i].size()){
-            if(compXDia[i][j].ranking().size() > 2){
-                paisesganadorRep.push_back(compXDia[i][j].ranking()[2].nacionalidad());
-                paisesganadorRep.push_back(compXDia[i][j].ranking()[1].nacionalidad());
-                paisesganadorRep.push_back(compXDia[i][j].ranking()[0].nacionalidad());
-            }
-            else if(compXDia[i][j].ranking().size() > 1){
-                paisesganadorRep.push_back(compXDia[i][j].ranking()[1].nacionalidad());
-                paisesganadorRep.push_back(compXDia[i][j].ranking()[0].nacionalidad());
-            }
-            if(compXDia[i][j].ranking().size() > 0){
-                paisesganadorRep.push_back(compXDia[i][j].ranking()[0].nacionalidad());
+    while(i < paises.size()){
+        vector<int> jornadasGanadoras;
+        jornadasGanadoras.push_back(0);
+        int j = 0;
+        while(j < this->_jornadaActual){
+            if(this->ganoMedallasEseDia(paises[i], j)){
+                jornadasGanadoras.push_back(j);
             }
             j++;
         }
-        paisesXDiaRep.push_back(paisesganadorRep);
+        jornadasGanadoras.push_back(_jornadaActual);
+        diasSinGanarPorPais.push_back(pair<Pais, int> (paises[i], this->maximaDistanciaEntreJornadas(jornadasGanadoras)));
         i++;
     }
-//PAISES SIN REPETIDOS(EN ESE DIA) Y GANARON ALGUNA MEDALLA
+
+    int maximosDiasSinGanar = 0;
     i = 0;
-    vector<Pais> paisesDelDia;
-    vector< vector<Pais> > paisesXDia;
-    while(i < paisesXDiaRep.size()){
-        j = 0;
-        paisesDelDia.clear();
-        while(j < paisesXDiaRep[i].size()){
-            int r = 0;
-            int k = 0;
-            while(k < paisesXDia[i].size()){
-                if(paisesXDiaRep[i][j] == paisesXDia[i][k]){
-                    r++;
-                }
-                k++;
-            }
-            if(r == 0){
-                paisesDelDia.push_back(paisesXDiaRep[i][j]);
-            }
-            j++;
+    while(i < diasSinGanarPorPais.size()) {
+        if(i == 0 || diasSinGanarPorPais[i].second > maximosDiasSinGanar) {
+            maximosDiasSinGanar = diasSinGanarPorPais[i].second;
         }
-        paisesXDia.push_back(paisesDelDia);
         i++;
     }
-//armo una lista de todos los paises que ganaron(ConRepetidos)
+
+    vector<Pais> secos;
     i = 0;
-    j = 0;
-    vector<Pais> todosLosPCOnRep;
-    while(i < paisesXDia.size()){
-        while(j < paisesXDia.size()){
-            todosLosPCOnRep.push_back(paisesXDia[i][j]);
-            j++;
+    while(i < diasSinGanarPorPais.size()){
+        if(diasSinGanarPorPais[i].second == maximosDiasSinGanar){
+            secos.push_back(diasSinGanarPorPais[i].first);
         }
         i++;
     }
-//armo una lista con todos los paises que ganaron(SinRepetidos), asi despues filtrar es mas facil(de ver)
-    i = 0;
-    vector<Pais> todosLosP;
-    while(i < todosLosPCOnRep.size()){
-        j = 0;
-        int r = 0;
-        while(j < todosLosP.size()){
-            if(todosLosPCOnRep[i] == todosLosP[j]){
-                r++;
-            }
-            j++;
-        }
-        if(r == 0){
-            todosLosP.push_back(todosLosPCOnRep[i]);
-        }
-        i++;
-    }
-//armo una lista de los paises con sus apariciones
-    i = 0;
-    vector<int> apariciones;
-    pair<Pais,vector<int>> PYsusApariciones;
-    vector< pair<Pais, vector<int>> > paisesYSusApariciones;
-    while(i < todosLosP.size()){
-        j = 0;
-        while(j < paisesXDia.size()){
-            int r = 0;
-            apariciones.clear();
-            while(r < paisesXDia[j].size()){
-                if(todosLosP[i] == paisesXDia[i][j]){
-                    apariciones.push_back(i);
-                }
-                r++;
-            }
-            j++;
-        }
-        PYsusApariciones.first = todosLosP[i];
-        PYsusApariciones.second = apariciones;
-        paisesYSusApariciones.push_back(PYsusApariciones);
-        i++;
-    }
-//saco las distancias (entre apariciones )y tomo las primeras apariciones
-    i = 0;
-    pair<Pais,vector<int>> pConDiferencias;
-    vector<pair<Pais,vector<int>>> paisesConDiferencias;
-    vector<int > diferencias;
-    while(i < paisesYSusApariciones.size()){
-        j = 0;
-        diferencias.clear();
-        diferencias.push_back(paisesYSusApariciones[i].second[0]);
-        while(j< paisesYSusApariciones[i].second.size()-1){
-            int r = paisesYSusApariciones[i].second[j+1]-paisesYSusApariciones[i].second[j];
-            diferencias.push_back(r);
-            j++;
-        }
-        pConDiferencias.first = paisesYSusApariciones[i].first;
-        pConDiferencias.second = diferencias;
-        paisesConDiferencias.push_back(pConDiferencias);
-        i++;
-    }
-//busco el maximo de las diferencias
-    i = 0;
-    int max = 0;
-    while(i < paisesConDiferencias.size()){
-        int r = paisesConDiferencias[i].second[0];
-        while(j < paisesConDiferencias[i].second.size()){
-            if(r < paisesConDiferencias[i].second[j]){
-                r = paisesConDiferencias[i].second[j];
-            }
-            j++;
-        }
-        if(max < r){
-            max = r;
-        }
-        i++;
-    }
-//filtro con max(el mayor tiempo que paso algun pais esperando ganar)
-    i = 0;
-    vector<Pais> paisesSequia;
-    while(i < paisesConDiferencias.size()){
-        int r = 0;
-        while(j < paisesConDiferencias[i].second.size()){
-            if(paisesConDiferencias[i].second[j] == max){
-                r++;
-            }
-            j++;
-        }
-        if(r > 0){
-            paisesSequia.push_back(paisesConDiferencias[i].first);
-        }
-        i++;
-    }
-    return paisesSequia;
+
+    return secos;
 }
 
 void JJOO::transcurrirDia() {
@@ -768,4 +638,59 @@ vector<pair<Atleta, int>> JJOO::_atletasQueGanaronAlgo() const {
         i++;
     }
     return atletasConMedallas;
+}
+
+vector<Pais> JJOO::_paises() const {
+    vector<Pais> paises;
+    int i = 0;
+    while(i < this->_atletas.size()){
+        int j = 0;
+        bool estaRepetido = false;
+        while(j < paises.size()){
+            if(paises[j] == this->_atletas[i].nacionalidad()){
+                estaRepetido = true;
+            }
+            j++;
+        }
+        if(!estaRepetido){
+            paises.push_back(this->_atletas[i].nacionalidad());
+        }
+        i++;
+    }
+    return paises;
+}
+
+bool JJOO::ganoMedallasEseDia(Pais pais, int dia) const{
+    bool gano = false;
+    int i = 0;
+    while(i < cronograma(dia).size()) {
+        Competencia competencia = cronograma(dia)[i];
+        int j = 0;
+        while(j < competencia.ranking().size() && j < 3) {
+            gano = gano || competencia.ranking()[j].nacionalidad() == pais;
+            j++;
+        }
+        i++;
+    }
+    return gano;
+}
+
+int JJOO::maximaDistanciaEntreJornadas(vector<int> jornadas) const {
+    vector<int> distancias;
+    int i = 1;
+    while (i < jornadas.size()){
+        distancias.push_back(jornadas[i] - jornadas[i - 1]);
+        i++;
+    }
+
+    int maximaDistancia;
+    i = 0;
+    while(i < distancias.size()) {
+        if(i == 0 || distancias[i] > maximaDistancia) {
+            maximaDistancia = distancias[i];
+        }
+        i++;
+    }
+
+    return maximaDistancia;
 }

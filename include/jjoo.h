@@ -16,7 +16,9 @@ private:
     vector<Atleta> _atletasSinPosicion(const vector<Atleta> &vec, int &i) const;
     vector<pair<Atleta, int>> _paresSinPosicion(const vector<pair<Atleta, int>> &vec, int &i) const;
     vector<pair<Atleta, int>> _atletasQueGanaronAlgo() const;
-
+    vector<Pais> _paises() const;
+    bool ganoMedallasEseDia(Pais pais, int dia) const;
+    int maximaDistanciaEntreJornadas(vector<int> jornadas) const;
 
 
 
