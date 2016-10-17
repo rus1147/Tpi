@@ -137,6 +137,14 @@ void Competencia::sancionarTramposos() {
     return;
 }
 
+Atleta Competencia::CiaNAtleta(int n){
+    unsigned int i = 0;
+    while(_participantes[i].ciaNumber()!= n){
+        ++i;
+    }
+    return _participantes[i];
+}
+
 void Competencia::mostrar(std::ostream &os) const {
     guardar(os);
 }
@@ -152,29 +160,96 @@ C (|Rugby|, |Masculino|) |False|
 (A |Jackson| |Masculino| 1935 |Escocia| 6 [(|Basket|, 25), (|Football|, 40), (|Rugby|, 5)])]
 [] []*/
 void Competencia::guardar(std::ostream &os) const {
-  /*  os << "{ A |" << << "|" << _genero << "|" << _anioNacimiento << "|" << _nacionalidad << "|" << _ciaNumber;
-
-    os << "[";
-    int i = 0;
-    while (i < _deportes.size()) {
-        os << "(" << "|" << _deportes[i].first << "|";
+    os << "C " << "(|" << _categoria.first << "|, " << "|" << _categoria.second << "|) " << " |"
+       << (_finalizada ? "True" : "False") << "| [";
+    unsigned int i = 0;
+    while (i < _participantes.size()) {
+        os << "(" << _participantes[i] << ")";
         i++;
-
-        int j = 1;
-        while (j < _deportes.size()) {
-            os << "," << _deportes[j].second << ")";
+        if (i < _participantes.size()) {
+            os << ",";
         }
-        if (i < _deportes.size() - 1) {
-            os << "],";
+    }
+    os << "]";
+    if (_finalizada) {
+        i = 0;
+        os << "[";
+        while (i < _ranking.size()) {
+            os << _ranking[i].ciaNumber();
+            i++;
+            if (i < _ranking.size()) {
+                os << ", ";
+            }
         }
-    }*/
+        os << "]";
+        i = 0;
+        os << "[";
+        while (i < _lesTocoControlAntiDoping.size()) {
+            os << "("
+               << _lesTocoControlAntiDoping[i].first.ciaNumber() << ", "
+               << "|" << (_lesTocoControlAntiDoping[i].second ? "True" : "False")
+               << "|)";
+            i++;
+            if (i < _lesTocoControlAntiDoping.size()) {
+                os << ", ";
+            }
+        }
+        os << "]";
+    }
 }
-
 void Competencia::cargar(std::istream &is) {
+    string at;
+    is>>at; // Leo "C"
+    getline(is,at,'(');
+    getline(is,at,'|');
+    getline(is,_categoria.first,'|');
+    getline(is,at,',');
+    getline(is,at,'|');
+    getline(is,at,'|');
+    _categoria.second = generostring(at);
+    getline(is,at,')');
+    getline(is,at,'|');
+    getline(is,at,'|');
+    _finalizada = at == "True";
+    getline(is,at,'[');
+    _participantes.clear();
+    while(is.peek() != ']'){
+        Atleta a("a",Genero::Masculino,1,"a",2); //Atleta con trash
+        getline(is,at,'(');
+        a.cargar(is);
+        _participantes.push_back(a);
+        getline(is,at,')');
+    }
+    _ranking.clear();
+    _lesTocoControlAntiDoping.clear();
+    if(_finalizada){
+        int ciaN;
+        bool seguir = true;
+        getline(is,at,'[');
+        while(seguir){
+            is>>at;
+            seguir = at.back()!=']';
+            at.back()=' ';
+            ciaN = atoi(at.c_str());
+            _ranking.push_back(CiaNAtleta(ciaN));
+        }
+        getline(is,at,'[');
+        while(is.peek() != ']'){
+            bool resultado;
+            getline(is,at,'(');
+            getline(is,at,',');
+            ciaN = atoi(at.c_str());
+            getline(is,at,'|');
+            getline(is,at,'|');
+            resultado = at == "True";
+            _lesTocoControlAntiDoping.push_back(make_pair( CiaNAtleta(ciaN) , resultado));
+            getline(is,at,')');
+        }
+    }
 }
 
 std::ostream &operator<<(std::ostream &os, const Competencia &c) {
-    c.mostrar(os);
+    c.guardar(os);
     return os;
 }
 
